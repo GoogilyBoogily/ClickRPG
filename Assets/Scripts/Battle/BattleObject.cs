@@ -1,8 +1,16 @@
 ﻿using System.Collections;
 
 namespace BattleObjects {
-	public class Enemy {
+	public class BattleObject {
 		// Properties
+		public string type {
+			get; set;
+		}
+
+		public float health {
+			get; set;
+		}
+
 		public float strength {
 			get; set;
 		}
@@ -39,18 +47,30 @@ namespace BattleObjects {
 			get; set;
 		}
 
+		public float basicAttackCooldown {
+			get; set;
+		}
+
+		public string target {
+			get; set;
+		}
+
 
 		// Instance Constructor
-		public Enemy() {
-			strength=0;
-			armor=0;
-			accuracy=0;
-			evasion=0;
-			crit=0;
-			block=0;
-			attackSpeed=0;
-			armorPen=0;
-			dexterity=0;
-		}   // end constructor()
+		public BattleObject() {
+			type = "";
+			health = 0;
+			strength = 0;
+			armor = 0;
+			accuracy = 0;
+			evasion = 0;
+			crit = 0;
+			block = 0;
+			attackSpeed = 0;
+			armorPen = 0;
+			dexterity = 0;
+			basicAttackCooldown = 0;
+			target = "";
+        }   // end constructor()
 	}   // end class
 }  // end namespace
