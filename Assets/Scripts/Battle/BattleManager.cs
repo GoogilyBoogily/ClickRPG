@@ -84,6 +84,9 @@ public class BattleManager : MonoBehaviour {
 
 
 
+
+
+
 		print("Defender health after damage: " + defender.health);
 
 		print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
