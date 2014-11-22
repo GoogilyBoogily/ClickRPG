@@ -27,13 +27,21 @@ namespace BattleObjects {
 			get; set;
 		}
 
-		public float crit {
+		public float critChance {
 			get; set;
 		}
 
-		public float block {
+        public float critMultiplier {
+            get; set;
+        }
+
+		public float blockChance {
 			get; set;
 		}
+
+        public float blockMultiplier {
+            get; set;
+        }
 
 		public float attackSpeed {
 			get; set;
@@ -64,8 +72,10 @@ namespace BattleObjects {
 			armor = 0;
 			accuracy = 0;
 			evasion = 0;
-			crit = 0;
-			block = 0;
+			critChance = 0;
+            critMultiplier = 0;
+			blockChance = 0;
+            blockMultiplier = 0;
 			attackSpeed = 0;
 			armorPen = 0;
 			dexterity = 0;
