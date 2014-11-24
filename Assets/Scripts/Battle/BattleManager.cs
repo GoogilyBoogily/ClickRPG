@@ -89,6 +89,7 @@ public class BattleManager : MonoBehaviour {
 
         if (missCheck <= ((defender.evasion) * (1-(attacker.accuracy/100)))) {
             print("Miss!");
+            print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             return;
             
         }   //end if
@@ -129,8 +130,8 @@ public class BattleManager : MonoBehaviour {
         if (block == 1) {
             print("Blocked! Damage dealt: " + damage);
 
-        } else if (crit == 1)
-            print("Critical strike! Damage dealt: " + damage); {
+        } else if (crit == 1) {
+            print("Critical strike! Damage dealt: " + damage);
 
         } else { 
             print("Damage dealt: " + damage); 
