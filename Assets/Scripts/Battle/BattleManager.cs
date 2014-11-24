@@ -126,15 +126,17 @@ public class BattleManager : MonoBehaviour {
 
 		defender.health -= damage;
 
-        if (block == 1)
+        if (block == 1) {
             print("Blocked! Damage dealt: " + damage);
 
-        else if (crit == 1)
-            print("Critical strike! Damage dealt: " + damage);
+        } else if (crit == 1)
+            print("Critical strike! Damage dealt: " + damage); {
 
-        else print("Damage dealt: " + damage);
+        } else { 
+            print("Damage dealt: " + damage); 
+        }
 
-		print("Defender health after damage: " + defender.health);
+        print("Defender health after damage: " + defender.health);
 		print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	}	// end Attack()
 
