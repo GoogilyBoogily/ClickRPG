@@ -43,6 +43,10 @@ namespace BattleObjects {
             get; set;
         }
 
+        public float finesse {
+            get; set;
+        }
+
 		public float attackSpeed {
 			get; set;
 		}

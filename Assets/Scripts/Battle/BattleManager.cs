@@ -22,12 +22,13 @@ public class BattleManager : MonoBehaviour {
 		heroObject.health = 1000;
 		heroObject.strength = 100;
 		heroObject.armor = 100;
-		heroObject.accuracy = 5;
-		heroObject.evasion = 5;
+		heroObject.accuracy = 50;
+		heroObject.evasion = 50;
 		heroObject.critChance = 20;
         heroObject.critMultiplier = 200;
 		heroObject.blockChance = 20;
         heroObject.blockMultiplier = 50;
+        heroObject.finesse = 30;
 		heroObject.attackSpeed = 5;
 		heroObject.armorPen = 0;
 		heroObject.dexterity = 5;
@@ -37,12 +38,13 @@ public class BattleManager : MonoBehaviour {
 		enemyObject.health = 1000;
 		enemyObject.strength = 100;
 		enemyObject.armor = 100;
-		enemyObject.accuracy = 2;
-		enemyObject.evasion = 2;
+		enemyObject.accuracy = 30;
+		enemyObject.evasion = 40;
 		enemyObject.critChance = 10;
         enemyObject.critMultiplier = 300;
-		enemyObject.blockChance = 10;
-        enemyObject.blockMultiplier = 80;
+		enemyObject.blockChance = 20;
+        enemyObject.blockMultiplier = 75;
+        enemyObject.finesse = 20;
 		enemyObject.attackSpeed = 2;
 		enemyObject.armorPen = 0;
 		enemyObject.dexterity = 2;
@@ -85,7 +87,7 @@ public class BattleManager : MonoBehaviour {
 
         var missCheck = Random.Range(1, 100);
 
-        if (missCheck >= (100 - (defender.evasion - attacker.accuracy))) {
+        if (missCheck <= ((defender.evasion) * (1-(attacker.accuracy/100)))) {
             print("Miss!");
             return;
             
@@ -99,43 +101,40 @@ public class BattleManager : MonoBehaviour {
         var blockCheck = Random.Range(1, 100);
         var critCheck = Random.Range(1, 100);
 
-        /*I thought it might make sense to have these outside the if statement, in case we have any 
-        reason to use them elsewhere.I figured if the "block" variable was only found in the 
-        "if" statement, it would get messy if something checked for it and it didn't exist.*/
 
-
-        if (blockCheck <= defender.blockChance) {
-            print("Blocked!");
+        if (blockCheck <= ((defender.blockChance) * (1-(attacker.finesse/100)))) {
             damage *= (1-(defender.blockMultiplier/100));
             attacker.armorPen /= 2;
             block = 1;
 
         }   //end if
 
-        /*block chance and initial block effects. Later damage will be affected by
-        block reduction, which is a stat that isn't initialized yet so i won't touch it. */
+        /*block chance and initial block effects. */
 
 
         if (block == 0 && critCheck <= attacker.critChance) {
-            print("Critical Strike!");
             damage *= (attacker.critMultiplier/100);
             attacker.armorPen *= 2;
             crit = 1;
 
         }   //end if
             
-        /*crit chance and initial crit effects. Same thing as block, eventually we'll
-        have crit damage but we'll worry about that later. */
+        /*crit chance and initial crit effects.  */
 
         defender.armor *= (1 - (attacker.armorPen/100));
         damage *= (100 / (100 + defender.armor));
 
-        print("Damage dealt: " + damage);
-
 		defender.health -= damage;
 
-		print("Defender health after damage: " + defender.health);
+        if (block == 1)
+            print("Blocked! Damage dealt: " + damage);
 
+        else if (crit == 1)
+            print("Critical strike! Damage dealt: " + damage);
+
+        else print("Damage dealt: " + damage);
+
+		print("Defender health after damage: " + defender.health);
 		print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	}	// end Attack()
 
