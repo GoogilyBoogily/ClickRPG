@@ -86,5 +86,6 @@ namespace BattleObjects {
 			basicAttackCooldown = 0;
 			target = "";
         }   // end constructor()
+
 	}   // end class
 }  // end namespace
