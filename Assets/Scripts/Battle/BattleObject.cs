@@ -67,6 +67,10 @@ namespace BattleObjects {
 			get; set;
 		}
 
+		public float attackTime {
+			get; set;
+		}
+
 
 		// Instance Constructor
 		public BattleObject() {
@@ -85,6 +89,7 @@ namespace BattleObjects {
 			dexterity = 0;
 			basicAttackCooldown = 0;
 			target = "";
+			attackTime = -1.0f;
         }   // end constructor()
 
 	}   // end class

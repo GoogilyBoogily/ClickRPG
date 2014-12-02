@@ -3,12 +3,29 @@ using System.Collections;
 using BattleObjects;
 
 public class BattleManager : MonoBehaviour {
+	// Enum for which phase in the battle we're in
+	//		This is used so we can pause the timer when casting and attacking are occuring
+	enum BattlePhases {
+		Initializing,
+		Waiting,
+		Attacking,
+		Casting
+	}	// end enum
+
+	// Init a variable to hold our current battle phase
+	BattlePhases currBattlePhase = BattlePhases.Initializing;
+
+	// Init a battle timer to keep track of time during the battle
+	float battleTimer = 0.0f;
+
+
 	// Init the player and enemy objects
 	BattleObject heroObject = new BattleObject();
 	BattleObject enemyObject = new BattleObject();
 
 	// Creates and initializes a new Queue.
 	Queue battleQueue = new Queue();
+
 
 	// Use this for initialization
 	void Start() {
@@ -32,7 +49,7 @@ public class BattleManager : MonoBehaviour {
 		heroObject.attackSpeed = 5;
 		heroObject.armorPen = 0;
 		heroObject.dexterity = 5;
-		heroObject.basicAttackCooldown = 5;
+		heroObject.basicAttackCooldown = 3;
 
 		// Init enemy stats...
 		enemyObject.health = 1000;
@@ -48,28 +65,60 @@ public class BattleManager : MonoBehaviour {
 		enemyObject.attackSpeed = 2;
 		enemyObject.armorPen = 0;
 		enemyObject.dexterity = 2;
-		enemyObject.basicAttackCooldown = 7;
+		enemyObject.basicAttackCooldown = 6;
+
+
+
+		// Schedule everyone's first attack
+		// (We should be scheduling the object with the lowest cooldown first)
+		ScheduleAttack(heroObject);
+		ScheduleAttack(enemyObject);
+
+		// Set the battle timer to "waiting" so that it begins incrementing
+		currBattlePhase = BattlePhases.Waiting;
+
+
 
 
 		// void InvokeRepeating(string methodName, float time, float repeatRate);
 		// Invokes the method methodName in time seconds, then repeatedly every repeatRate seconds.
-		InvokeRepeating("DoFight", 0, 5);
-	}  // end Start()
+		//InvokeRepeating("DoFight", 0, 5);
+	}   // end Start()
+
 
 	// Update is called once per frame
 	void Update() {
+		// If we're in between attacks or castings, increment the timer
+		if(currBattlePhase == BattlePhases.Waiting) {
+			// Add the time onto the battle timer
+			battleTimer += Time.deltaTime;
+
+			// If it's the battle object at the beginning of the queue's time to attack, attack!
+			//	And then schedule its next attack
+			if( ((BattleObject)battleQueue.Peek()).attackTime <= battleTimer ) {
+				BattleObject attackingObject = (BattleObject)battleQueue.Dequeue();
+                Attack(attackingObject);
+
+				ScheduleAttack(attackingObject);
+			}	//end if
+		}	// end if
 		
-	}  // end Update()
+	}   // end Update()
 
-	// Goes through everyone in the attack queue and does their basic attacking phase
-	void DoFight() {
-		battleQueue.Enqueue(heroObject);
-		battleQueue.Enqueue(enemyObject);
+	void ScheduleAttack(BattleObject objectToScheduleAttack) {
+		// Take the object that we have to schedule an attack for, and grab its cooldown
+		float objectCooldown = objectToScheduleAttack.basicAttackCooldown;
 
-		while(battleQueue.Count > 0) {
-			Attack((BattleObject)battleQueue.Dequeue());
-		}	// end while
-	}	// end DoFight()
+		// Add the cooldown to the current time to get its next attack time
+		float nextAttackTime = battleTimer + objectCooldown;
+
+		// Set the objects next attack time
+		objectToScheduleAttack.attackTime = nextAttackTime;
+
+		// Enqueue it into the queue
+		battleQueue.Enqueue(objectToScheduleAttack);
+	}	// end ScheduleAttack
+
 
 	// Takes in the attacker and defender and computes damage done
     void Attack(BattleObject attacker) {
@@ -81,7 +130,7 @@ public class BattleManager : MonoBehaviour {
 			defender = heroObject;
 		}	// end else/if
 
-		print("Attacker: " + attacker.type + " -- Defender: " + defender.type);
+		print("Attacker: " + attacker.type);
 
 		// Do battle algorithm stuff here
 
