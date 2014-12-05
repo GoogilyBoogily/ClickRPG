@@ -59,6 +59,14 @@ namespace BattleObjects {
 			get; set;
 		}
 
+        public float tenacity {
+            get; set;
+        }
+
+        public float resolve {
+            get; set;
+        }
+
 		public float basicAttackCooldown {
 			get; set;
 		}
@@ -87,6 +95,8 @@ namespace BattleObjects {
 			attackSpeed = 0;
 			armorPen = 0;
 			dexterity = 0;
+            tenacity = 0;
+            resolve = 0;
 			basicAttackCooldown = 0;
 			target = "";
 			attackTime = -1.0f;

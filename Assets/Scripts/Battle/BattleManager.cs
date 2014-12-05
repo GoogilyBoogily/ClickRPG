@@ -50,6 +50,8 @@ public class BattleManager : MonoBehaviour {
 		heroObject.attackSpeed = 5;
 		heroObject.armorPen = 0;
 		heroObject.dexterity = 5;
+        heroObject.tenacity = 0;
+        heroObject.resolve = 0;
 		heroObject.basicAttackCooldown = 3;
 
 		// Init enemy stats...
@@ -66,6 +68,8 @@ public class BattleManager : MonoBehaviour {
 		enemyObject.attackSpeed = 2;
 		enemyObject.armorPen = 0;
 		enemyObject.dexterity = 2;
+        enemyObject.tenacity = 0;
+        enemyObject.resolve = 0;
 		enemyObject.basicAttackCooldown = 6;
 
 
