@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using BattleObjects;
+using Abilities;
 
 public class BattleManager : MonoBehaviour {
 	// Enum for which phase in the battle we're in

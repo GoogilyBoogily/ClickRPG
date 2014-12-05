@@ -1,9 +1,7 @@
 ﻿using System.Collections;
 
-namespace Abilities
-{
-    public class Ability
-    {
+namespace Abilities {
+    public class Ability {
         // Properties
         public string type {
             get; set;
@@ -71,11 +69,10 @@ namespace Abilities
 
 
         // Instance Constructor
-        public Ability()
-        {
+        public Ability() {
             type = "";
-            primaryDamageType = 0;
-            element = 0;
+            primaryDamageType = "";
+            element = "";
             duration = 0;
             strengthModifer = 0;
             wisdomModifier = 0;
