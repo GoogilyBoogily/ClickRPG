@@ -82,12 +82,6 @@ public class BattleManager : MonoBehaviour {
 		// Set the battle timer to "waiting" so that it begins incrementing
 		currBattlePhase = BattlePhases.Waiting;
 
-
-
-
-		// void InvokeRepeating(string methodName, float time, float repeatRate);
-		// Invokes the method methodName in time seconds, then repeatedly every repeatRate seconds.
-		//InvokeRepeating("DoFight", 0, 5);
 	}   // end Start()
 
 
@@ -189,7 +183,7 @@ public class BattleManager : MonoBehaviour {
 
         } else { 
             print("Damage dealt: " + damage); 
-        }
+        } // end if/else block
 
         print("Defender health after damage: " + defender.health);
 		print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
