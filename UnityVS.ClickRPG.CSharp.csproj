@@ -53,7 +53,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Battle\Ability.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleManager.cs" />
-    <Compile Include="Assets\Scripts\Battle\BattleObject.cs" />
+    <Compile Include="Assets\Scripts\Battle\BattleObjects.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>

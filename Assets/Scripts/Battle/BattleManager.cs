@@ -21,8 +21,8 @@ public class BattleManager : MonoBehaviour {
 
 
 	// Init the player and enemy objects
-	BattleObject heroObject = new BattleObject();
-	BattleObject enemyObject = new BattleObject();
+	BasicHero heroObject = new BasicHero();
+	BasicEnemy enemyObject = new BasicEnemy();
 
 	// Creates and initializes a new Queue.
 	Queue battleQueue = new Queue();
@@ -30,50 +30,6 @@ public class BattleManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start() {
-		heroObject.type = "hero";
-		heroObject.target = "enemy";
-
-		enemyObject.type = "enemy";
-		enemyObject.target = "hero";
-
-		// Init hero stats...
-		heroObject.health = 1000;
-		heroObject.strength = 100;
-		heroObject.armor = 100;
-		heroObject.accuracy = 50;
-		heroObject.evasion = 50;
-		heroObject.critChance = 20;
-        heroObject.critMultiplier = 200;
-		heroObject.blockChance = 20;
-        heroObject.blockMultiplier = 50;
-        heroObject.finesse = 30;
-		heroObject.attackSpeed = 5;
-		heroObject.armorPen = 0;
-		heroObject.dexterity = 5;
-        heroObject.tenacity = 0;
-        heroObject.resolve = 0;
-		heroObject.basicAttackCooldown = 3;
-
-		// Init enemy stats...
-		enemyObject.health = 1000;
-		enemyObject.strength = 100;
-		enemyObject.armor = 100;
-		enemyObject.accuracy = 30;
-		enemyObject.evasion = 40;
-		enemyObject.critChance = 10;
-        enemyObject.critMultiplier = 300;
-		enemyObject.blockChance = 20;
-        enemyObject.blockMultiplier = 75;
-        enemyObject.finesse = 20;
-		enemyObject.attackSpeed = 2;
-		enemyObject.armorPen = 0;
-		enemyObject.dexterity = 2;
-        enemyObject.tenacity = 0;
-        enemyObject.resolve = 0;
-		enemyObject.basicAttackCooldown = 6;
-
-
-
 		// Schedule everyone's first attack
 		// (We should be scheduling the object with the lowest cooldown first)
 		ScheduleAttack(heroObject);
