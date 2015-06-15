@@ -94,8 +94,7 @@ public class BattleManager : MonoBehaviour {
         if (missCheck <= ((defender.evasion) * (1-(attacker.accuracy/100)))) {
             print("Miss!");
             print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            return;
-            
+			return;
         }   //end if
 
         float damage = attacker.strength;
