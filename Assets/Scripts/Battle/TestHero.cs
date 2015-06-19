@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Abilities;
 
-public class TestHero : BaseChampion {
+public class TestHero : Hero {
 
 	public TestHero() {
-        name = "Test";
-		description = "I like butts.";
+        name = "Sir Testalot";
+		description = "I like butts. And testing.";
 		health = 1000;
 		strength = 100;
 		armor = 100;
@@ -26,5 +26,12 @@ public class TestHero : BaseChampion {
 		basicAttackCooldown = 3;
 
 		target = "";
+
+        abilities = new List<Ability>();
+
+        abilities.add(new TestAbility1());
+        abilities.add(new TestAbility2());
+        
+
 	} // end constructor
 }

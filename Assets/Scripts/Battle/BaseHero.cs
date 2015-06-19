@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Abilities;
 
-public class BaseChampion {
+public class Hero {
 	public string name;
 	public string description;
 	public float health;
@@ -25,5 +25,5 @@ public class BaseChampion {
 
 	public string target;
 
-	public List<Ability> abilities = new List<Ability>();
+	public List<Ability> abilities;
 }

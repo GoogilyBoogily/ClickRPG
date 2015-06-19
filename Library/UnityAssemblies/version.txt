@@ -1,4 +1,1 @@
-5.0.2f1:1.9.9.0
-StandaloneWindows
-C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll
-C:\Program Files\Unity\Editor\Data\PlaybackEngines\iossupport\UnityEditor.iOS.Extensions.Xcode.dll
+5.0.2f1:1.9.0.0

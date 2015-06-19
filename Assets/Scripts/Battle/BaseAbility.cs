@@ -39,9 +39,13 @@ namespace Abilities {
 			get; set;
 		}
 
-		public float cooldown {
+		public float procSpacing {
 			get; set;
 		}
+
+        public float procDamage {
+            get; set;
+        }
 
 
         // Instance Constructor
@@ -55,7 +59,8 @@ namespace Abilities {
 			duration = 1.0f;
 			resource = "";
 			cost = 0.0f;
-			cooldown = 1.0f;
+			procSpacing = 1.0f;
+            procDamage = 10.0f;
         } // end constructor()
 
     } // end class
