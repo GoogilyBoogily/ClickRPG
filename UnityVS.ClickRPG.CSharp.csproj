@@ -55,11 +55,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Battle\BaseAbility.cs" />
+    <Compile Include="Assets\Scripts\Battle\BaseEnemy.cs" />
     <Compile Include="Assets\Scripts\Battle\BaseHero.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleManager.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleObjects.cs" />
+    <Compile Include="Assets\Scripts\Battle\GUIScript.cs" />
     <Compile Include="Assets\Scripts\Battle\TestAbility1.cs" />
     <Compile Include="Assets\Scripts\Battle\TestAbility2.cs" />
+    <Compile Include="Assets\Scripts\Battle\TestEnemy.cs" />
     <Compile Include="Assets\Scripts\Battle\TestHero.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />

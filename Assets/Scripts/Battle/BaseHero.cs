@@ -3,27 +3,53 @@ using System.Collections;
 using System.Collections.Generic;
 using Abilities;
 
-public class Hero {
-	public string name;
-	public string description;
-	public float health;
-	public float strength;
-	public float armor;
-	public float accuracy;
-	public float evasion;
-	public float critChance;
-	public float critMultiplier;
-	public float blockChance;
-	public float blockMultiplier;
-	public float finesse;
-	public float attackSpeed;
-	public float armorPen;
-	public float dexterity;
-	public float tenacity;
-	public float resolve;
-	public float basicAttackCooldown;
+namespace Heroes {
+    public class Hero {
 
-	public string target;
+        public string name;
+        public string description;
 
-	public List<Ability> abilities;
+        //Hero Stats
+
+        public float strength;
+        public float dexterity;
+        public float physicalPenetration;
+        public float physicalAccuracy;
+        public float physicalFinesse;
+        public float physicalCritChance;
+        public float physicalCritMultiplier;
+
+        public float armor;
+        public float physicalEvasion;
+        public float physicalBlockChance;
+        public float physicalBlockMultiplier;
+
+        public float wisdom;
+        public float celerity;
+        public float magicalPenetration;
+        public float magicalAccuracy;
+        public float magicalFinesse;
+        public float magicalCritChance;
+        public float magicalCritMultiplier;
+
+        public float spirit;
+        public float magicalEvasion;
+        public float magicalBlockChance;
+        public float magicalBlockMultiplier;
+
+        public float health;
+        public float healthRegen;
+        public float mana;
+        public float manaRegen;
+        public float tenacity;
+        public float resolve;
+
+        //Targeting?
+
+        public string target;
+
+        //Ability list
+
+        public List<Ability> abilities;
+    }
 }

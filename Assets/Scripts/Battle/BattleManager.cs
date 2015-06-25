@@ -1,16 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
-using BattleObjects;
+using Heroes;
+using Enemies;
 using Abilities;
+
+
+
 
 public class BattleManager : MonoBehaviour {
 	// Enum for which phase in the battle we're in
 	//		This is used so we can pause the timer when casting and attacking are occuring
-	enum BattlePhases {
+	enum ControlPhases {
 		Initializing,
 		Waiting,
+		Charging,
 		Attacking,
-		Casting
+        Unresponsive
 	}	// end enum
 
 	// Init a variable to hold our current battle phase
@@ -19,10 +24,9 @@ public class BattleManager : MonoBehaviour {
 	// Init a battle timer to keep track of time during the battle
 	float battleTimer = 0.0f;
 
-
 	// Init the player and enemy objects
-	BasicHero heroObject = new BasicHero();
-	BasicEnemy enemyObject = new BasicEnemy();
+	TestHero heroObject = new TestHero();
+	TestEnemy enemyObject = new TestEnemy();
 
 	// Creates and initializes a new Queue.
 	Queue battleQueue = new Queue();
@@ -31,7 +35,7 @@ public class BattleManager : MonoBehaviour {
 	// Use this for initialization
 	void Start() {
 		// Schedule everyone's first attack
-		// (We should be scheduling the object with the lowest cooldown first)
+		// (We should be scheduling the object with the lowest proc spacing first)
 		ScheduleAttack(heroObject);
 		ScheduleAttack(enemyObject);
 
@@ -43,8 +47,7 @@ public class BattleManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update() {
-		// If we're in between attacks or castings, increment the timer
-		if(currBattlePhase == BattlePhases.Waiting) {
+		
 			// Add the time onto the battle timer
 			battleTimer += Time.deltaTime;
 
@@ -60,12 +63,17 @@ public class BattleManager : MonoBehaviour {
 		
 	}   // end Update()
 
-	void ScheduleAttack(BattleObject objectToScheduleAttack) {
+
+
+        foreach (Ability ability in objectToScheduleAttack.abilities) {
+            
+        }
+
 		// Take the object that we have to schedule an attack for, and grab its cooldown
-		float objectCooldown = objectToScheduleAttack.basicAttackCooldown;
+		float objectCooldown = objectToScheduleAttack.abilities.procSpacing;
 
 		// Add the cooldown to the current time to get its next attack time
-		float nextAttackTime = battleTimer + objectCooldown;
+		float nextAttackTime = battleTimer + procSpacing;
 
 		// Set the objects next attack time
 		objectToScheduleAttack.attackTime = nextAttackTime;
@@ -143,5 +151,5 @@ public class BattleManager : MonoBehaviour {
         print("Defender health after damage: " + defender.health);
 		print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	}	// end Attack()
-
-}  // end class
+ // end class
+} 

@@ -9,7 +9,7 @@ public class TestAbility1 : Ability {
         description = "Pokes. Hard.";
         type = "";
         target = "";
-        abilityStartTime = -1.0f;
+        abilityStartTime = 5.0f;
         chargeTime = 2.0f;
         duration = 10.0f;
         resource = "";
