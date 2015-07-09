@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Abilities;
+using Heroes;
 
 public class TestHero : Hero {
 
@@ -9,6 +10,7 @@ public class TestHero : Hero {
 
         name = "Sir Testalot";
 		description = "I like butts. And testing.";
+
 
         //Hero Stats
 
@@ -45,16 +47,35 @@ public class TestHero : Hero {
         tenacity = 30;
         resolve = 0;
 
-        //Targeting?
+       
+        //Variables to keep track of things (timers & counters)
 
-		target = "";
+        currentAbilityType = AbilityTypes.Null;
+        currentBattleState = BattleStates.Initializing;
+
 
         //Ability list
 
-        abilities = new List<Ability>();
+        abilities = new List<Ability>(7);
 
-        abilities.Add(new TestAbility1());
-        abilities.Add(new TestAbility2());
+        abilities.Add(new NullAbility());
+        abilities.Add(new PunchBarrage());
+        abilities.Add(new ChargePunch());
+
+
+        //Variables to keep track of cooldowns
+
+        abilityOneCooldownTimer = 0.0f;
+        abilityTwoCooldownTimer = 0.0f;
+        abilityThreeCooldownTimer = 0.0f;
+        abilityFourCooldownTimer = 0.0f;
+        abilityFiveCooldownTimer = 0.0f;
+        abilitySixCooldownTimer = 0.0f;
+
+
+        //Targeting?
+
+        target = "";
         
 
 	} // end constructor

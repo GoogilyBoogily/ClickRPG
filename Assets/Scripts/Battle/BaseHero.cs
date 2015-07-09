@@ -9,6 +9,7 @@ namespace Heroes {
         public string name;
         public string description;
 
+
         //Hero Stats
 
         public float strength;
@@ -44,12 +45,59 @@ namespace Heroes {
         public float tenacity;
         public float resolve;
 
+        
+        //List of battle states
+
+        public enum BattleStates {
+            Initializing,
+            Wait,
+            Charge,
+            Burst,
+            Barrage,
+            Uncharge,
+            Dead
+        } // end BattleStates enum
+
+
+        //List of ability types
+
+        public enum AbilityTypes {
+            Null,
+            Burst,
+            Barrage,
+            InfCharge,
+            InfBarrage,
+            Toggle
+        } //end AbilityTypes enum
+
+
+        //Variables to keep track of current things
+
+        public BattleStates currentBattleState;
+        public AbilityTypes currentAbilityType;
+
+       
+        //Ability list, and an object keeping track of the current ability
+
+        public List<Ability> abilities;
+
+        public Ability currentAbility;
+
+
+        //Variables to keep track of cooldowns (assuming six abilities)
+        //might need more than this eventually - things like toggling between ability sets,
+            //global cooldowns between stances...? Anyway, for now, 6 because 6.
+
+        public float abilityOneCooldownTimer;
+        public float abilityTwoCooldownTimer;
+        public float abilityThreeCooldownTimer;
+        public float abilityFourCooldownTimer;
+        public float abilityFiveCooldownTimer;
+        public float abilitySixCooldownTimer;
+
+
         //Targeting?
 
         public string target;
-
-        //Ability list
-
-        public List<Ability> abilities;
     }
 }

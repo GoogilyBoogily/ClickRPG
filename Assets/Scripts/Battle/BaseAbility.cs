@@ -2,6 +2,17 @@
 
 namespace Abilities {
     public class Ability {
+        
+        public enum AbilityTypes {
+            Null,
+            Burst,
+            Barrage,
+            InfCharge,
+            InfBarrage,
+            Toggle
+        }
+
+
         // Properties
 		public string name {
 			get; set;
@@ -11,7 +22,7 @@ namespace Abilities {
 			get; set;
 		}
 
-        public string type {
+        public AbilityTypes type {
             get; set;
         }
 
@@ -19,17 +30,53 @@ namespace Abilities {
             get; set;
         }
 
-        public float abilityStartTime {
+
+        //Durations
+
+        public float chargeDuration {
             get; set;
         }
 
-		public float chargeTime {
+		public float abilityDuration {
 			get; set;
 		}
 
-		public float duration {
+
+        //Proc handlings
+
+		public float procSpacing {
 			get; set;
 		}
+
+		public float procDamage {
+			get; set;
+		}
+
+        public int procLimit {
+            get; set;
+        }
+
+
+        //Timers & Counters
+
+        public float chargeStartTimer {
+            get; set;
+        }
+
+        public float abilityStartTimer {
+            get; set;
+        }
+
+        public float lastProcTimer {
+            get; set;
+        }
+       
+        public int procCounter {
+            get; set;
+        }
+
+     
+        //Resource management
 
 		public string resource {
 			get; set;
@@ -39,28 +86,31 @@ namespace Abilities {
 			get; set;
 		}
 
-		public float procSpacing {
-			get; set;
-		}
-
-        public float procDamage {
+        public float cooldown {
             get; set;
         }
 
 
         // Instance Constructor
         public Ability() {
+
 			name = "";
 			description = "";
-            type = "";
+            type = AbilityTypes.Null;
             target = "";
-            abilityStartTime = -1.0f;
-			chargeTime = 1.0f;
-			duration = 1.0f;
-			resource = "";
-			cost = 0.0f;
+
+            chargeDuration = 1.0f;
+			abilityDuration = 1.0f;
+
 			procSpacing = 1.0f;
-            procDamage = 10.0f;
+            lastProcTimer = 0.0f;
+			procDamage = 1.0f;
+            procLimit = 1;
+
+			resource = "";
+			cost = 10.0f;
+            cooldown = 1.0f;
+
         } // end constructor()
 
     } // end class
