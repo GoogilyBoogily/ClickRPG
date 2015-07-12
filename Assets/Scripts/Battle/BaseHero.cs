@@ -83,20 +83,7 @@ namespace Heroes {
 
         public Ability currentAbility;
 
-
-        //Variables to keep track of cooldowns (assuming six abilities)
-        //might need more than this eventually - things like toggling between ability sets,
-            //global cooldowns between stances...? Anyway, for now, 6 because 6.
-
-        public float abilityOneCooldownTimer;
-        public float abilityTwoCooldownTimer;
-        public float abilityThreeCooldownTimer;
-        public float abilityFourCooldownTimer;
-        public float abilityFiveCooldownTimer;
-        public float abilitySixCooldownTimer;
-
-
-        //Targeting?
+        //Targeting? I'll just leave this here for now.
 
         public string target;
     }

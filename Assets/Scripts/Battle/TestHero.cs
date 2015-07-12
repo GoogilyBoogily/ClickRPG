@@ -40,7 +40,7 @@ public class TestHero : Hero {
         magicalBlockChance = 0;
         magicalBlockMultiplier = 0;
 
-        health = 1000;
+        health = 2400;
         healthRegen = 5;
         mana = 500;
         manaRegen = 20;
@@ -59,20 +59,11 @@ public class TestHero : Hero {
         abilities = new List<Ability>(7);
 
         abilities.Add(new NullAbility());
-        abilities.Add(new PunchBarrage());
         abilities.Add(new ChargePunch());
+        abilities.Add(new PunchBarrage());
+        abilities.Add(new HealingPunch());
 
-
-        //Variables to keep track of cooldowns
-
-        abilityOneCooldownTimer = 0.0f;
-        abilityTwoCooldownTimer = 0.0f;
-        abilityThreeCooldownTimer = 0.0f;
-        abilityFourCooldownTimer = 0.0f;
-        abilityFiveCooldownTimer = 0.0f;
-        abilitySixCooldownTimer = 0.0f;
-
-
+ 
         //Targeting?
 
         target = "";

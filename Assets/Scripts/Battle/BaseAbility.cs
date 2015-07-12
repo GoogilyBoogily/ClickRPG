@@ -12,6 +12,14 @@ namespace Abilities {
             Toggle
         }
 
+        public enum ProcEffects {
+            Null,
+            Damage,
+            Heal,
+            AddStatus,
+            CleanseStatus
+        }
+
 
         // Properties
 		public string name {
@@ -23,6 +31,18 @@ namespace Abilities {
 		}
 
         public AbilityTypes type {
+            get; set;
+        }
+
+        public ProcEffects effectOne {
+            get; set;
+        }
+
+        public ProcEffects effectTwo {
+            get; set;
+        }
+
+        public ProcEffects effectThree {
             get; set;
         }
 
@@ -42,21 +62,6 @@ namespace Abilities {
 		}
 
 
-        //Proc handlings
-
-		public float procSpacing {
-			get; set;
-		}
-
-		public float procDamage {
-			get; set;
-		}
-
-        public int procLimit {
-            get; set;
-        }
-
-
         //Timers & Counters
 
         public float chargeStartTimer {
@@ -74,8 +79,26 @@ namespace Abilities {
         public int procCounter {
             get; set;
         }
+        public int procLimit {
+            get; set;
+        }
 
-     
+
+        //Proc handlings
+
+        public float procSpacing {
+            get; set;
+        }
+
+        public float procDamage {
+            get; set;
+        }
+
+        public float procHeal {
+            get; set;
+        }
+
+
         //Resource management
 
 		public string resource {
@@ -90,6 +113,10 @@ namespace Abilities {
             get; set;
         }
 
+        public float cooldownEndTimer {
+            get; set;
+        }
+
 
         // Instance Constructor
         public Ability() {
@@ -97,19 +124,28 @@ namespace Abilities {
 			name = "";
 			description = "";
             type = AbilityTypes.Null;
+            effectOne = ProcEffects.Null;
+            effectTwo = ProcEffects.Null;
+            effectThree = ProcEffects.Null;
             target = "";
 
             chargeDuration = 1.0f;
 			abilityDuration = 1.0f;
 
-			procSpacing = 1.0f;
+            chargeStartTimer = 0.0f;
+            abilityStartTimer = 0.0f;
             lastProcTimer = 0.0f;
-			procDamage = 1.0f;
+            procCounter = 0;
             procLimit = 1;
+
+			procSpacing = 1.0f;
+            procDamage = 0.0f;
+            procHeal = 0.0f;
 
 			resource = "";
 			cost = 10.0f;
             cooldown = 1.0f;
+            cooldownEndTimer = 0.0f;
 
         } // end constructor()
 

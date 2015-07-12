@@ -2,14 +2,14 @@
 using System.Collections;
 using Abilities;
 
-public class ChargePunch : Ability {
+public class HealingPunch : Ability {
 
-    public ChargePunch() {
+    public HealingPunch() {
 
-        name = "Charge Punch";
-        description = "A big ol' punch. Hurts like the dickens.";
+        name = "Healing Punch";
+        description = "Punch yourself so hard that it feels good!";
         type = AbilityTypes.Burst;
-        effectOne = ProcEffects.Damage;
+        effectOne = ProcEffects.Heal;
         target = "Single";
 
         chargeDuration = 2.0f;
@@ -20,14 +20,14 @@ public class ChargePunch : Ability {
         lastProcTimer = 0.0f;
         procCounter = 0;
         procLimit = 1;
-        
+
         procSpacing = 2.0f;
-        procDamage = 100.0f;
-        procHeal = 0.0f;
+        procDamage = 0.0f;
+        procHeal = 200.0f;
 
         resource = "";
         cost = 0.0f;
-        cooldown = 3.0f;
+        cooldown = 5.0f;
         cooldownEndTimer = 0.0f;
 
     } //end constructor()
