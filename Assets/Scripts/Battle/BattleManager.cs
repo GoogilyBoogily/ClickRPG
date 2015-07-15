@@ -18,7 +18,8 @@ public class BattleManager : MonoBehaviour {
 
     Queue enemyQueue = new Queue();
     Enemy actingEnemy;
-    
+
+    bool doesBennetSuck = true;
 
     // Init player & enemy objects
 
