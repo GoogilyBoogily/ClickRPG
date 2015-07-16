@@ -21,8 +21,8 @@ public class FirePwnage : Ability {
         procCounter = 0;
         procLimit = 1000;
 
-        procSpacing = 0.05f;
-        procDamage = 10.0f;
+        procSpacing = 0.20f;
+        procDamage = 12.0f;
 
         resource = "";
         cost = 0.0f;

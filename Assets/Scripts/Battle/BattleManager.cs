@@ -94,42 +94,16 @@ public class BattleManager : MonoBehaviour {
         battleQueue.Enqueue(heroObjectOne);
         battleQueue.Enqueue(heroObjectTwo);
         //eventually enqueue rest of heroes (this will have to draw from a list of the 1-4 heroes you have)
+        
         battleQueue.Enqueue(enemyObject);
 
-
-        //Now we start 
+        //battleQueue checks for anything in the queue. At the beginning of every frame, everything is enqueued, 
+            //and each time it runs through the switch down below, it dequeues something. 
+            //When it's through every BattleObject, battleQueue.Count will return 0, and we're on to the next frame.
 
         while (battleQueue.Count > 0) {
 
             actingBattleObject = (BattleObject)battleQueue.Peek();
-
-
-            /*
-                if (actingBattleObject.currentAbility.effectOne == Ability.ProcEffects.Damage) {
-
-                    enemyObject.health -= actingHero.currentAbility.procDamage;
-                    Debug.Log(enemyObject.health);
-
-                    actingHero.currentAbility.procCounter++;
-                    actingHero.currentAbility.lastProcTimer = battleTimer;
-                }
-
-                else if (actingHero.currentAbility.effectOne == Ability.ProcEffects.Heal) {
-                    actingHero.health += actingHero.currentAbility.procHeal;
-                    Debug.Log(actingHero.health);
-                }
-
-                if (actingHero.currentAbility.type == Ability.AbilityTypes.Burst) {
-                    actingHero.currentAbility = actingHero.abilities[0];
-                }
-
-                heroQueue.Dequeue();
-        
-            }
-
-              */
-            //commenting out queue stuff for reference 
-
 
             //Switch checks for what BattleState the object it is, and figures out what that
             //object needs to do in this frame.
@@ -201,7 +175,6 @@ public class BattleManager : MonoBehaviour {
                     //Charge as in actually charging for a Burst or Barrage.
 
                     //check for timer & ability type Burst, dumping appropriately
-
                     if ((battleTimer > (actingBattleObject.currentAbility.chargeStartTimer + actingBattleObject.currentAbility.chargeDuration)) && (actingBattleObject.currentAbility.type == Ability.AbilityTypes.Burst)) {
 
                         Debug.Log(actingBattleObject.currentAbility.name + "!");
@@ -217,7 +190,7 @@ public class BattleManager : MonoBehaviour {
                         actingBattleObject.currentBattleState = BattleObject.BattleStates.Barrage;
                     }
 
-                    break;
+                    break; //end Charge case
 
 
                 case (BattleObject.BattleStates.Burst):
@@ -247,16 +220,19 @@ public class BattleManager : MonoBehaviour {
 
                     actingBattleObject.currentAbility.chargeStartTimer = 0.0f;
                     actingBattleObject.currentBattleState = BattleObject.BattleStates.Wait;
-                    actingBattleObject.currentAbility = actingBattleObject.abilities[0];
+                    
+                    //actingBattleObject.currentAbility = actingBattleObject.abilities[0];
+                        //I have no idea why this isn't working; every other setting to abilities has worked this way, but it doesn't like NullAbility.
 
-                    break;
+                    break; //end Burst case
 
 
                 case (BattleObject.BattleStates.Barrage):
 
                     //check for barrage limits being reached
 
-                    if (battleTimer < (actingBattleObject.currentAbility.abilityStartTimer + actingBattleObject.currentAbility.abilityDuration)) {
+                    if ((battleTimer < (actingBattleObject.currentAbility.abilityStartTimer + actingBattleObject.currentAbility.abilityDuration)) &&
+                        (actingBattleObject.currentAbility.procCounter < actingBattleObject.currentAbility.procLimit)) {
 
                         //check if it's time to proc, and Enqueue the hero to proc if it is
 
@@ -269,10 +245,16 @@ public class BattleManager : MonoBehaviour {
 
                                 actingBattleObject.currentAbility.procCounter++;
                                 actingBattleObject.currentAbility.lastProcTimer = battleTimer;
-                            } else if (actingBattleObject.currentAbility.effectOne == Ability.ProcEffects.Heal) {
+                            } 
+                            
+                            else if (actingBattleObject.currentAbility.effectOne == Ability.ProcEffects.Heal) {
 
                                 actingBattleObject.health += actingBattleObject.currentAbility.procHeal;
                                 Debug.Log(actingBattleObject.health);
+
+                                actingBattleObject.currentAbility.procCounter++;
+                                actingBattleObject.currentAbility.lastProcTimer = battleTimer;
+
                             }
 
                         } //end if
@@ -296,181 +278,23 @@ public class BattleManager : MonoBehaviour {
 
                         //reset currentAbility and currentBattleState (dump the hell out of here, we done)
 
+                        //actingBattleObject.currentAbility = actingBattleObject.abilities[0];
+                            //I have no idea why this isn't working; every other setting to abilities has worked this way, but it doesn't like NullAbility.
+                        
                         actingBattleObject.currentBattleState = BattleObject.BattleStates.Wait;
 
                     }
 
-                    break;
+                    break; //end barrage case
 
 
-            } //ends switch
+            } //end BattleStates switch
 
             battleQueue.Dequeue();
 
-            /*
+        } //end battleQueue "while"
 
-
-             switch (heroObjectTwo.currentBattleState) { //Switch for heroObjectTwo battlestates (eventually these will be combined into one, I'm just wanting 2 heroes I'm SORRY)
-
-                 case (Hero.BattleStates.Wait):
-
-                     //Commands can be issued in Wait. Eventually, heroes will have a default
-                     //ability to default back to (infinite barrage usually), and at that
-                     //"wait" will only be used at battle start, after the hero is revived, etc.
-
-                     if (selectedHero == heroObjectTwo) {
-
-                         if (abilityOneKeyed) {
-
-                             if (battleTimer > heroObjectTwo.abilities[1].cooldownEndTimer) {
-
-                                 heroObjectTwo.currentAbility = heroObjectTwo.abilities[1];
-                                 Debug.Log("Charging " + heroObjectTwo.currentAbility.name + "!");
-
-                                 heroObjectTwo.currentAbility.chargeStartTimer = battleTimer;
-                                 heroObjectTwo.currentBattleState = Hero.BattleStates.Charge;
-
-                             }
-
-                             else {
-                                 Debug.Log(heroObjectTwo.abilities[1] + " is on cooldown for " + (heroObjectTwo.abilities[1].cooldownEndTimer - battleTimer) + " seconds!");
-                             }
-
-                         } //end ability one keyed
-
-                         else if (abilityTwoKeyed) {
-
-                             if (battleTimer > heroObjectTwo.abilities[2].cooldownEndTimer) {
-
-                                 heroObjectTwo.currentAbility = heroObjectTwo.abilities[2];
-                                 Debug.Log("Charging " + heroObjectTwo.currentAbility.name + "!");
-
-                                 heroObjectTwo.currentAbility.chargeStartTimer = battleTimer;
-                                 heroObjectTwo.currentBattleState = Hero.BattleStates.Charge;
-
-                             }
-
-                             else {
-                                 Debug.Log(heroObjectTwo.abilities[2] + " is on cooldown for " + (heroObjectTwo.abilities[2].cooldownEndTimer - battleTimer) + " seconds!");
-                             }
-
-                         } //end ability two keyed
-
-                         else if (abilityThreeKeyed) {
-
-                             if (battleTimer > heroObjectTwo.abilities[3].cooldownEndTimer) {
-
-                                 heroObjectTwo.currentAbility = heroObjectTwo.abilities[3];
-                                 Debug.Log("Charging " + heroObjectTwo.currentAbility.name + "!");
-
-                                 heroObjectTwo.currentAbility.chargeStartTimer = battleTimer;
-                                 heroObjectTwo.currentBattleState = Hero.BattleStates.Charge;
-
-
-                             }
-
-                             else {
-                                 Debug.Log(heroObjectTwo.abilities[3] + " is on cooldown for " + (heroObjectTwo.abilities[3].cooldownEndTimer - battleTimer) + " seconds!");
-                             }
-
-                         } //end ability three keyed
-
-                     } //end conditional hero input
-
-                     break;
-
-
-                 case (Hero.BattleStates.Charge):
-
-                     //Charge as in actually charging for a Burst or Barrage.
-
-                     //check for timer & ability type Burst, dumping appropriately
-
-                     if ((battleTimer > (heroObjectTwo.currentAbility.chargeStartTimer + heroObjectTwo.currentAbility.chargeDuration)) && (heroObjectTwo.currentAbility.type == Ability.AbilityTypes.Burst)) {
-
-                         Debug.Log(heroObjectTwo.currentAbility.name + "!");
-                         heroObjectTwo.currentBattleState = Hero.BattleStates.Burst;
-                     }
-
-                     //check for timer & ability type Barrage, dumping appropriately
-
-                     else if ((battleTimer > (heroObjectTwo.currentAbility.chargeStartTimer + heroObjectTwo.currentAbility.chargeDuration)) && (heroObjectTwo.currentAbility.type == Ability.AbilityTypes.Barrage)) {
-
-
-                         Debug.Log(heroObjectTwo.currentAbility.name + "!");
-                         heroObjectTwo.currentAbility.abilityStartTimer = battleTimer;
-                         heroObjectTwo.currentBattleState = Hero.BattleStates.Barrage;
-                     }
-
-                     break;
-
-
-                 case (Hero.BattleStates.Burst):
-
-                     //Enqueue hero for proc
-
-                     heroQueue.Enqueue(heroObjectTwo);
-
-                     //Set cooldown timer
-
-                     heroObjectTwo.currentAbility.cooldownEndTimer = battleTimer + heroObjectTwo.currentAbility.cooldown;
-
-                     //Reset chargeStartTimer and currentBattleState
-
-                     heroObjectTwo.currentAbility.chargeStartTimer = 0.0f;
-                     heroObjectTwo.currentBattleState = Hero.BattleStates.Wait;
-
-                     break;
-
-
-                 case (Hero.BattleStates.Barrage):
-
-                     //check for barrage limits being reached
-
-                     if (battleTimer < (heroObjectTwo.currentAbility.abilityStartTimer + heroObjectTwo.currentAbility.abilityDuration)) {
-
-                         //check if it's time to proc, and Enqueue the hero to proc if it is
-
-                         if (battleTimer >= (heroObjectTwo.currentAbility.lastProcTimer + heroObjectTwo.currentAbility.procSpacing)) {
-
-                             heroQueue.Enqueue(heroObjectTwo);
-
-                         } //end if
-
-                     } //end barrage limit checks
-
-                     //if barrage limits are reached, reset timers and type/state
-
-                     else {
-
-                         //reset timers/counters
-
-                         heroObjectTwo.currentAbility.chargeStartTimer = 0;
-                         heroObjectTwo.currentAbility.abilityStartTimer = 0;
-
-                         heroObjectTwo.currentAbility.lastProcTimer = 0.0f;
-                         heroObjectTwo.currentAbility.procCounter = 0;
-
-                         //set cooldown
-
-                         heroObjectTwo.currentAbility.cooldownEndTimer = battleTimer + heroObjectTwo.currentAbility.cooldown;
-
-                         //reset currentAbility and currentBattleState (dump the hell out of here, we done)
-
-                         heroObjectTwo.currentBattleState = Hero.BattleStates.Wait;
-
-                     }
-
-                     break;
-
-             } //end heroObjectTwo switch
-
-
-                 */
-
-        } //end queue "while"
-
-    } //end update
+    } //end Update
 
 } //end BattleManager
 

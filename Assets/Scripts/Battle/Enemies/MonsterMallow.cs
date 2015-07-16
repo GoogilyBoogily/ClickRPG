@@ -51,6 +51,13 @@ public class MonsterMallow : Enemy
         currentBattleState = BattleStates.Wait;
 
 
+        //Ability List
+
+        abilities = new List<Ability>(7);
+
+        abilities.Add(new NullAbility());
+
+
         //Targeting?
 
         target = "";

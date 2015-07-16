@@ -13,7 +13,7 @@ public class PunchBarrage : Ability {
         target = "Single";
 
         chargeDuration = 2.0f;
-        abilityDuration = 2.0f;
+        abilityDuration = 3.0f;
 
         chargeStartTimer = 0.0f;
         abilityStartTimer = 0.0f;
@@ -21,8 +21,8 @@ public class PunchBarrage : Ability {
         procCounter = 0;
         procLimit = 1000;
 
-        procSpacing = 0.33f;
-        procDamage = 15.0f;
+        procSpacing = 0.5f;
+        procDamage = 40.0f;
 
         resource = "";
         cost = 0.0f;
