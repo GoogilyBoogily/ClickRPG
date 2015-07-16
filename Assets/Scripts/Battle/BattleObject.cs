@@ -9,6 +9,7 @@ namespace BattleObjects {
 
         public string name;
         public string description;
+        public string targetType;
 
         //Stats
 
@@ -31,10 +32,10 @@ namespace BattleObjects {
         public float magicalBlockChance;
         public float magicalBlockMultiplier;
 
-        public float health;
+        public float maxHealth;
+        public float currentHealth;
         public float healthRegen;
-        public float mana;
-        public float manaRegen;
+
         public float tenacity;
         public float resolve;
 
@@ -63,18 +64,22 @@ namespace BattleObjects {
             Toggle
         } //end AbilityTypes enum
 
+        public enum TargetTypes {
+            HeroTarget,
+            HeroTargetStealthed,
+            EnemyTarget
+        } //end TargetTypes enum
+
 
         //Variables to keep track of current things
 
         public BattleStates currentBattleState;
         public AbilityTypes currentAbilityType;
-
+        
         public Ability currentAbility;
 
         public List<Ability> abilities;
 
-        //Targeting? I'll just leave this here for now.
-
-        public string target;
+       
     }
 }

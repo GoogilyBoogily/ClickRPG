@@ -39,14 +39,20 @@ public class BattleManager : MonoBehaviour {
 
         heroObjectOne.currentBattleState = BattleObject.BattleStates.Wait;
         heroObjectOne.currentAbility = heroObjectOne.abilities[0];
+        heroObjectOne.currentHealth = heroObjectOne.maxHealth;
 
         heroObjectTwo.currentBattleState = BattleObject.BattleStates.Wait;
         heroObjectTwo.currentAbility = heroObjectTwo.abilities[0];
-        
+        heroObjectTwo.currentHealth = heroObjectTwo.maxHealth;
+
+        enemyObject.currentHealth = enemyObject.maxHealth;
+
         selectedHero = heroObjectOne;
         
-        Debug.Log("Enemy Health: " + enemyObject.health);
-        Debug.Log("Hero Health: " + heroObjectOne.health);
+        Debug.Log(heroObjectOne.name + "s Health: " + heroObjectOne.currentHealth);
+        Debug.Log(heroObjectTwo.name + "s Health: " + heroObjectTwo.currentHealth);
+
+        Debug.Log(enemyObject.name + "s Health: " + enemyObject.currentHealth);
 
 
     }   // end Start()
@@ -199,16 +205,23 @@ public class BattleManager : MonoBehaviour {
 
                     if (actingBattleObject.currentAbility.effectOne == Ability.ProcEffects.Damage) {
 
-                        enemyObject.health -= actingBattleObject.currentAbility.procDamage;
-                        Debug.Log(enemyObject.health);
+                        enemyObject.currentHealth -= actingBattleObject.currentAbility.procDamage;
+                        Debug.Log(enemyObject.currentHealth);
 
                         actingBattleObject.currentAbility.procCounter++;
                         actingBattleObject.currentAbility.lastProcTimer = battleTimer;
 
                     } else if (actingBattleObject.currentAbility.effectOne == Ability.ProcEffects.Heal) {
 
-                        actingBattleObject.health += actingBattleObject.currentAbility.procHeal;
-                        Debug.Log(actingBattleObject.health);
+                        if (actingBattleObject.currentHealth + actingBattleObject.currentAbility.procHeal <= actingBattleObject.maxHealth) {
+                            actingBattleObject.currentHealth += actingBattleObject.currentAbility.procHeal;
+                        } 
+                        
+                        else {
+                            actingBattleObject.currentHealth = actingBattleObject.maxHealth;
+                        }
+
+                        Debug.Log(actingBattleObject.currentHealth);
                     }
 
 
@@ -240,8 +253,8 @@ public class BattleManager : MonoBehaviour {
 
                             if (actingBattleObject.currentAbility.effectOne == Ability.ProcEffects.Damage) {
 
-                                enemyObject.health -= actingBattleObject.currentAbility.procDamage;
-                                Debug.Log(enemyObject.health);
+                                enemyObject.currentHealth -= actingBattleObject.currentAbility.procDamage;
+                                Debug.Log(enemyObject.currentHealth);
 
                                 actingBattleObject.currentAbility.procCounter++;
                                 actingBattleObject.currentAbility.lastProcTimer = battleTimer;
@@ -249,8 +262,13 @@ public class BattleManager : MonoBehaviour {
                             
                             else if (actingBattleObject.currentAbility.effectOne == Ability.ProcEffects.Heal) {
 
-                                actingBattleObject.health += actingBattleObject.currentAbility.procHeal;
-                                Debug.Log(actingBattleObject.health);
+                                if (actingBattleObject.currentHealth + actingBattleObject.currentAbility.procHeal <= actingBattleObject.maxHealth) {
+                                    actingBattleObject.currentHealth += actingBattleObject.currentAbility.procHeal;
+                                } 
+                                
+                                else {
+                                    actingBattleObject.currentHealth = actingBattleObject.maxHealth;
+                                }
 
                                 actingBattleObject.currentAbility.procCounter++;
                                 actingBattleObject.currentAbility.lastProcTimer = battleTimer;
