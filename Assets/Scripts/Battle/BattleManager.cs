@@ -140,7 +140,7 @@ public class BattleManager : MonoBehaviour {
                         if (battleTimer > selectedHero.abilities[1].cooldownEndTimer) {
 
                             selectedHero.currentAbility = selectedHero.abilities[1];
-                            Debug.Log("Select a Target! ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
+                            Debug.Log("Select a Target for " + selectedHero.currentAbility.name + " (press o, p, n or m)");
 
                             selectedHero.currentAbility.chargeStartTimer = battleTimer;
                             selectedHero.currentBattleState = Hero.BattleStates.Target;
@@ -223,7 +223,9 @@ public class BattleManager : MonoBehaviour {
                         } //end if single hero
 
                         if (abilityCanceled) {
+                            Debug.Log(actingBattleObject.currentAbility.name + " canceled!");
                             actingBattleObject.currentBattleState = BattleObject.BattleStates.Wait;
+
                         }
                     } //end if targetChosen == false
 
