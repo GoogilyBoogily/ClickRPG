@@ -7,37 +7,103 @@ namespace BattleObjects {
 
     public class BattleObject {
 
-        public string name;
-        public string description;
-        public string targetType;
+        public string name {
+			get; set;
+    }
+
+        public string description {
+            get; set;
+        }
+
+        public string targetType {
+            get; set;
+        }
+
 
         //Stats
 
-        public float physicalPenetration;
-        public float physicalAccuracy;
-        public float physicalFinesse;
+        public float physicalPenetration {
+            get; set;
+        }
 
-        public float magicalPenetration;
-        public float magicalAccuracy;
-        public float magicalFinesse;
+        public float physicalAccuracy {
+            get; set;
+        }
 
-        public float armor;
-        public float physicalEvasion;
-        public float physicalBlockChance;
-        public float physicalBlockMultiplier;
+        public float physicalFinesse {
+            get; set;
+        }
 
 
-        public float spirit;
-        public float magicalEvasion;
-        public float magicalBlockChance;
-        public float magicalBlockMultiplier;
+        public float magicalPenetration {
+            get; set;
+        }
 
-        public float maxHealth;
-        public float currentHealth;
-        public float healthRegen;
+        public float magicalAccuracy {
+            get; set;
+        }
 
-        public float tenacity;
-        public float resolve;
+        public float magicalFinesse {
+            get; set;
+        }
+
+
+        public float armor {
+            get; set;
+        }
+
+        public float physicalEvasion {
+            get; set;
+        }
+
+        public float physicalBlockChance {
+            get; set;
+        }
+
+        public float physicalBlockMultiplier {
+            get; set;
+        }
+
+
+
+        public float spirit {
+            get; set;
+        }
+
+        public float magicalEvasion {
+            get; set;
+        }
+
+        public float magicalBlockChance {
+            get; set;
+        }
+
+        public float magicalBlockMultiplier {
+            get; set;
+        }
+
+
+        public float maxHealth {
+            get; set;
+        }
+
+        public float currentHealth {
+            get; set;
+        }
+
+        public float healthRegen {
+            get; set;
+        }
+
+
+        public float tenacity {
+            get; set;
+        }
+
+        public float resolve {
+            get;  set;
+        }
+
 
 
         //List of battle states
@@ -45,6 +111,7 @@ namespace BattleObjects {
         public enum BattleStates {
             Initializing,
             Wait,
+            Target,
             Charge,
             Burst,
             Barrage,
@@ -54,16 +121,6 @@ namespace BattleObjects {
 
 
         //List of ability types
-
-        public enum AbilityTypes {
-            Null,
-            Burst,
-            Barrage,
-            InfCharge,
-            InfBarrage,
-            Toggle
-        } //end AbilityTypes enum
-
         public enum TargetTypes {
             HeroTarget,
             HeroTargetStealthed,
@@ -73,8 +130,14 @@ namespace BattleObjects {
 
         //Variables to keep track of current things
 
-        public BattleStates currentBattleState;
-        public AbilityTypes currentAbilityType;
+        public BattleStates currentBattleState {
+            get; set;
+        }
+
+        public Ability.AbilityTypes currentAbilityType {
+            get; set;
+        }
+
         
         public Ability currentAbility;
 

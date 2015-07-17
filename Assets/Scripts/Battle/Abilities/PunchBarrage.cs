@@ -8,9 +8,10 @@ public class PunchBarrage : Ability {
 
         name = "Punch Barrage";
         description = "Many tiny fast punches.";
-        type = AbilityTypes.Barrage;
-        effectOne = ProcEffects.Damage;
-        target = "Single";
+        abilityType = AbilityTypes.Barrage;
+        targetScope = TargetScopes.SingleEnemy;
+
+        damagesTarget = true;
 
         chargeDuration = 2.0f;
         abilityDuration = 3.0f;

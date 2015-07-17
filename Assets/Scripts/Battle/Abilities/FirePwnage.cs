@@ -8,9 +8,10 @@ public class FirePwnage : Ability {
 
         name = "Fire Pwnage";
         description = "OH GOD THIS IS ENOUGH FIRE TO KILL AT LEAST ALL OF THE SPIDERS EVER.";
-        type = AbilityTypes.Barrage;
-        effectOne = ProcEffects.Damage;
-        target = "Single";
+        abilityType = AbilityTypes.Barrage;
+        targetScope = TargetScopes.SingleEnemy;
+
+        damagesTarget = true;
 
         chargeDuration = 4.0f;
         abilityDuration = 3.0f;

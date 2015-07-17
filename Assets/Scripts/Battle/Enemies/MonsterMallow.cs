@@ -34,13 +34,13 @@ public class MonsterMallow : Enemy
         magicalBlockMultiplier = 0;
 
         maxHealth = 5000;
-        healthRegen = 5;
+        healthRegen = 10;
 
         tenacity = 30;
         resolve = 0;
 
 
-        currentAbilityType = AbilityTypes.Null;
+        currentAbilityType = Ability.AbilityTypes.Null;
         currentBattleState = BattleStates.Wait;
 
 

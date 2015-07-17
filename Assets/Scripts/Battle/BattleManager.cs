@@ -23,12 +23,12 @@ public class BattleManager : MonoBehaviour {
     TestHero heroObjectOne = new TestHero();
     TestHero2 heroObjectTwo = new TestHero2();
 
-    MonsterMallow enemyObject = new MonsterMallow();
+    MonsterMallow enemyObjectOne = new MonsterMallow();
+    Kangaremu enemyObjectTwo = new Kangaremu();
 
     Hero selectedHero;
     BattleObject actingBattleObject;
     
-
 
     // Use this for initialization
     void Start() {
@@ -45,14 +45,16 @@ public class BattleManager : MonoBehaviour {
         heroObjectTwo.currentAbility = heroObjectTwo.abilities[0];
         heroObjectTwo.currentHealth = heroObjectTwo.maxHealth;
 
-        enemyObject.currentHealth = enemyObject.maxHealth;
+        Debug.Log(heroObjectOne.name + "'s Health: " + heroObjectOne.currentHealth);
+        Debug.Log(heroObjectTwo.name + "'s Health: " + heroObjectTwo.currentHealth);
+
+        enemyObjectOne.currentHealth = enemyObjectOne.maxHealth;
+        enemyObjectTwo.currentHealth = enemyObjectTwo.maxHealth;
+
+        Debug.Log(enemyObjectOne.name + "'s Health: " + enemyObjectOne.currentHealth);
+        Debug.Log(enemyObjectTwo.name + "'s Health: " + enemyObjectTwo.currentHealth);
 
         selectedHero = heroObjectOne;
-        
-        Debug.Log(heroObjectOne.name + "s Health: " + heroObjectOne.currentHealth);
-        Debug.Log(heroObjectTwo.name + "s Health: " + heroObjectTwo.currentHealth);
-
-        Debug.Log(enemyObject.name + "s Health: " + enemyObject.currentHealth);
 
 
     }   // end Start()
@@ -63,17 +65,33 @@ public class BattleManager : MonoBehaviour {
 
         //button presses here, is dumb way of doing it, but it works for now
 
-        bool heroOneSelectKeyed = Input.GetButtonDown("Hero One");
-        bool heroTwoSelectKeyed = Input.GetButtonDown("Hero Two");
+        bool heroOneSelectKeyed = Input.GetButtonDown("Hero One Select");
+        bool heroTwoSelectKeyed = Input.GetButtonDown("Hero Two Select");
 
         bool abilityOneKeyed = Input.GetButtonDown("Ability One");
         bool abilityTwoKeyed = Input.GetButtonDown("Ability Two");
         bool abilityThreeKeyed = Input.GetButtonDown("Ability Three");
 
+        bool heroObjectOneTargeted = Input.GetButtonDown("Hero One Target");
+        bool heroObjectTwoTargeted = Input.GetButtonDown("Hero Two Target");
+
+        bool enemyObjectOneTargeted = Input.GetButtonDown("Enemy One Target");
+        bool enemyObjectTwoTargeted = Input.GetButtonDown("Enemy Two Target");
+
+        bool abilityCanceled = Input.GetButtonDown("Cancel Ability");
+
 
         //Controls for hero selection
 
-        if (selectedHero == heroObjectOne) {
+        if (selectedHero != heroObjectOne) {
+
+            if (heroOneSelectKeyed) {
+                selectedHero = heroObjectOne;
+                Debug.Log(selectedHero.name + " selected!");
+            }
+        }
+
+        if (selectedHero != heroObjectTwo) {
 
             if (heroTwoSelectKeyed) {
                 selectedHero = heroObjectTwo;
@@ -81,12 +99,6 @@ public class BattleManager : MonoBehaviour {
             }
         }
 
-        if (selectedHero == heroObjectTwo) {
-            if (heroOneSelectKeyed) {
-                selectedHero = heroObjectOne;
-                Debug.Log(selectedHero.name + " selected!");
-            }
-        }
 
         //Increment battleTimer 
  
@@ -101,7 +113,8 @@ public class BattleManager : MonoBehaviour {
         battleQueue.Enqueue(heroObjectTwo);
         //eventually enqueue rest of heroes (this will have to draw from a list of the 1-4 heroes you have)
         
-        battleQueue.Enqueue(enemyObject);
+        battleQueue.Enqueue(enemyObjectOne);
+        battleQueue.Enqueue(enemyObjectTwo);
 
         //battleQueue checks for anything in the queue. At the beginning of every frame, everything is enqueued, 
             //and each time it runs through the switch down below, it dequeues something. 
@@ -127,10 +140,10 @@ public class BattleManager : MonoBehaviour {
                         if (battleTimer > selectedHero.abilities[1].cooldownEndTimer) {
 
                             selectedHero.currentAbility = selectedHero.abilities[1];
-                            Debug.Log("Charging " + selectedHero.currentAbility.name + "!");
+                            Debug.Log("Select a Target! ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
 
                             selectedHero.currentAbility.chargeStartTimer = battleTimer;
-                            selectedHero.currentBattleState = Hero.BattleStates.Charge;
+                            selectedHero.currentBattleState = Hero.BattleStates.Target;
                         } 
                         
                         else {
@@ -144,10 +157,10 @@ public class BattleManager : MonoBehaviour {
                     if (battleTimer > selectedHero.abilities[2].cooldownEndTimer) {
 
                             selectedHero.currentAbility = selectedHero.abilities[2];
-                            Debug.Log("Charging " + selectedHero.currentAbility.name + "!");
+                            Debug.Log("Select a Target! ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
 
                             selectedHero.currentAbility.chargeStartTimer = battleTimer;
-                            selectedHero.currentBattleState = Hero.BattleStates.Charge;
+                            selectedHero.currentBattleState = Hero.BattleStates.Target;
                         } 
                         
                         else {
@@ -161,10 +174,10 @@ public class BattleManager : MonoBehaviour {
                     if (battleTimer > selectedHero.abilities[3].cooldownEndTimer) {
 
                             selectedHero.currentAbility = selectedHero.abilities[3];
-                            Debug.Log("Charging " + selectedHero.currentAbility.name + "!");
+                            Debug.Log("Select a Target! ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
 
                             selectedHero.currentAbility.chargeStartTimer = battleTimer;
-                            selectedHero.currentBattleState = Hero.BattleStates.Charge;
+                            selectedHero.currentBattleState = Hero.BattleStates.Target;
                         } 
                         
                         else {
@@ -176,22 +189,68 @@ public class BattleManager : MonoBehaviour {
                     break; //end Wait case
 
 
+
+                case (BattleObject.BattleStates.Target):
+
+                    if (actingBattleObject.currentAbility.targetChosen == false) {
+
+                        if (actingBattleObject.currentAbility.targetScope == Ability.TargetScopes.SingleEnemy) {
+
+                            if (enemyObjectOneTargeted) {
+                                actingBattleObject.currentAbility.currentTarget = enemyObjectOne;
+                                actingBattleObject.currentAbility.targetChosen = true;
+                            }
+
+                            else if (enemyObjectTwoTargeted) {
+                                actingBattleObject.currentAbility.currentTarget = enemyObjectTwo;
+                                actingBattleObject.currentAbility.targetChosen = true;
+                            }
+
+                        } //end if single enemy
+
+                        if (actingBattleObject.currentAbility.targetScope == Ability.TargetScopes.SingleHero) {
+
+                            if (heroObjectOneTargeted) {
+                                actingBattleObject.currentAbility.currentTarget = heroObjectOne;
+                                actingBattleObject.currentAbility.targetChosen = true;
+                            }
+
+                            else if (heroObjectTwoTargeted) {
+                                actingBattleObject.currentAbility.currentTarget = heroObjectTwo;
+                                actingBattleObject.currentAbility.targetChosen = true;
+                            }
+
+                        } //end if single hero
+
+                        if (abilityCanceled) {
+                            actingBattleObject.currentBattleState = BattleObject.BattleStates.Wait;
+                        }
+                    } //end if targetChosen == false
+
+
+                    if (actingBattleObject.currentAbility.targetChosen == true) {
+                        Debug.Log("Charging " + actingBattleObject.currentAbility.name + " on " + actingBattleObject.currentAbility.currentTarget.name + "!");
+                        actingBattleObject.currentBattleState = BattleObject.BattleStates.Charge;
+                        actingBattleObject.currentAbility.targetChosen = false;
+                    }
+
+            
+                    break; //end Target case
+
+
                 case (BattleObject.BattleStates.Charge):
 
                     //Charge as in actually charging for a Burst or Barrage.
 
                     //check for timer & ability type Burst, dumping appropriately
-                    if ((battleTimer > (actingBattleObject.currentAbility.chargeStartTimer + actingBattleObject.currentAbility.chargeDuration)) && (actingBattleObject.currentAbility.type == Ability.AbilityTypes.Burst)) {
+                    if ((battleTimer > (actingBattleObject.currentAbility.chargeStartTimer + actingBattleObject.currentAbility.chargeDuration)) && (actingBattleObject.currentAbility.abilityType == Ability.AbilityTypes.Burst)) {
 
-                        Debug.Log(actingBattleObject.currentAbility.name + "!");
                         actingBattleObject.currentBattleState = BattleObject.BattleStates.Burst;
                     }
 
                     //check for timer & ability type Barrage, dumping appropriately
-                    else if ((battleTimer > (actingBattleObject.currentAbility.chargeStartTimer + actingBattleObject.currentAbility.chargeDuration)) && (actingBattleObject.currentAbility.type == Ability.AbilityTypes.Barrage)) {
+                    else if ((battleTimer > (actingBattleObject.currentAbility.chargeStartTimer + actingBattleObject.currentAbility.chargeDuration)) && (actingBattleObject.currentAbility.abilityType == Ability.AbilityTypes.Barrage)) {
 
-
-                        Debug.Log(actingBattleObject.currentAbility.name + "!");
                         actingBattleObject.currentAbility.abilityStartTimer = battleTimer;
                         actingBattleObject.currentBattleState = BattleObject.BattleStates.Barrage;
                     }
@@ -203,25 +262,28 @@ public class BattleManager : MonoBehaviour {
 
                     //Make dat proc happen
 
-                    if (actingBattleObject.currentAbility.effectOne == Ability.ProcEffects.Damage) {
+                    if (actingBattleObject.currentAbility.damagesTarget) {
 
-                        enemyObject.currentHealth -= actingBattleObject.currentAbility.procDamage;
-                        Debug.Log(enemyObject.currentHealth);
+                        actingBattleObject.currentAbility.currentTarget.currentHealth -= actingBattleObject.currentAbility.procDamage;
+
+                        Debug.Log(actingBattleObject + " uses " + actingBattleObject.currentAbility.name + " on " + actingBattleObject.currentAbility.currentTarget + "!");
+                        Debug.Log(actingBattleObject.currentAbility.currentTarget.currentHealth);
 
                         actingBattleObject.currentAbility.procCounter++;
                         actingBattleObject.currentAbility.lastProcTimer = battleTimer;
 
-                    } else if (actingBattleObject.currentAbility.effectOne == Ability.ProcEffects.Heal) {
+                    } else if (actingBattleObject.currentAbility.healsTarget) {
 
-                        if (actingBattleObject.currentHealth + actingBattleObject.currentAbility.procHeal <= actingBattleObject.maxHealth) {
-                            actingBattleObject.currentHealth += actingBattleObject.currentAbility.procHeal;
+                        if (actingBattleObject.currentAbility.currentTarget.currentHealth + actingBattleObject.currentAbility.procHeal <= actingBattleObject.currentAbility.currentTarget.maxHealth) {
+                            actingBattleObject.currentAbility.currentTarget.currentHealth += actingBattleObject.currentAbility.procHeal;
                         } 
                         
                         else {
-                            actingBattleObject.currentHealth = actingBattleObject.maxHealth;
+                            actingBattleObject.currentAbility.currentTarget.currentHealth = actingBattleObject.maxHealth;
                         }
 
-                        Debug.Log(actingBattleObject.currentHealth);
+                        Debug.Log(actingBattleObject + " uses " + actingBattleObject.currentAbility.name + " on " + actingBattleObject.currentAbility.currentTarget + "!");
+                        Debug.Log(actingBattleObject.currentAbility.currentTarget.currentHealth);
                     }
 
 
@@ -232,6 +294,7 @@ public class BattleManager : MonoBehaviour {
                     //Reset chargeStartTimer and currentBattleState
 
                     actingBattleObject.currentAbility.chargeStartTimer = 0.0f;
+                    actingBattleObject.currentAbility.currentTarget = null;
                     actingBattleObject.currentBattleState = BattleObject.BattleStates.Wait;
                     
                     //actingBattleObject.currentAbility = actingBattleObject.abilities[0];
@@ -251,31 +314,33 @@ public class BattleManager : MonoBehaviour {
 
                         if (battleTimer >= (actingBattleObject.currentAbility.lastProcTimer + actingBattleObject.currentAbility.procSpacing)) {
 
-                            if (actingBattleObject.currentAbility.effectOne == Ability.ProcEffects.Damage) {
+                            if (actingBattleObject.currentAbility.damagesTarget) {
 
-                                enemyObject.currentHealth -= actingBattleObject.currentAbility.procDamage;
-                                Debug.Log(enemyObject.currentHealth);
+                                actingBattleObject.currentAbility.currentTarget.currentHealth -= actingBattleObject.currentAbility.procDamage;
+                                Debug.Log(actingBattleObject.currentAbility.currentTarget.currentHealth);
 
                                 actingBattleObject.currentAbility.procCounter++;
                                 actingBattleObject.currentAbility.lastProcTimer = battleTimer;
                             } 
                             
-                            else if (actingBattleObject.currentAbility.effectOne == Ability.ProcEffects.Heal) {
+                            else if (actingBattleObject.currentAbility.healsTarget) {
 
-                                if (actingBattleObject.currentHealth + actingBattleObject.currentAbility.procHeal <= actingBattleObject.maxHealth) {
-                                    actingBattleObject.currentHealth += actingBattleObject.currentAbility.procHeal;
-                                } 
-                                
-                                else {
-                                    actingBattleObject.currentHealth = actingBattleObject.maxHealth;
-                                }
+                                 if (actingBattleObject.currentAbility.currentTarget.currentHealth + actingBattleObject.currentAbility.procHeal <= actingBattleObject.currentAbility.currentTarget.maxHealth) {
+                                    actingBattleObject.currentAbility.currentTarget.currentHealth += actingBattleObject.currentAbility.procHeal;
+                                 } 
+                        
+                                 else {
+                                    actingBattleObject.currentAbility.currentTarget.currentHealth = actingBattleObject.maxHealth;
+                                 }
+
+                                Debug.Log(actingBattleObject.currentAbility.currentTarget.currentHealth);
+                        
+                            }
 
                                 actingBattleObject.currentAbility.procCounter++;
                                 actingBattleObject.currentAbility.lastProcTimer = battleTimer;
 
-                            }
-
-                        } //end if
+                        } //end if (proc checks/stuff)
 
                     } //end if(barrage limit checks)
 
@@ -298,7 +363,9 @@ public class BattleManager : MonoBehaviour {
 
                         //actingBattleObject.currentAbility = actingBattleObject.abilities[0];
                             //I have no idea why this isn't working; every other setting to abilities has worked this way, but it doesn't like NullAbility.
-                        
+
+                        actingBattleObject.currentAbility = null;
+                        actingBattleObject.currentAbility.currentTarget = null;
                         actingBattleObject.currentBattleState = BattleObject.BattleStates.Wait;
 
                     }

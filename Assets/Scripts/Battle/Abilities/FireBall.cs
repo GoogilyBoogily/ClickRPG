@@ -8,9 +8,10 @@ public class FireBall : Ability {
 
         name = "Fire Ball";
         description = "OMG DAT CHICK JUST MADE FIRE WID HER HANDS.";
-        type = AbilityTypes.Burst;
-        effectOne = ProcEffects.Damage;
-        target = "Single";
+        abilityType = AbilityTypes.Burst;
+        targetScope = TargetScopes.SingleEnemy;
+
+        damagesTarget = true;
 
         chargeDuration = 4.0f;
         abilityDuration = 0.0f;

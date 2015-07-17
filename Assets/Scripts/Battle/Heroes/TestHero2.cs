@@ -44,7 +44,7 @@ public class TestHero2 : Hero {
 
         //Variables to keep track of things (timers & counters)
 
-        currentAbilityType = AbilityTypes.Null;
+        currentAbilityType = Ability.AbilityTypes.Null;
         currentBattleState = BattleStates.Initializing;
 
 

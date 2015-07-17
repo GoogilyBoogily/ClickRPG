@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using BattleObjects;
 
 namespace Abilities {
     public class Ability {
@@ -12,12 +13,15 @@ namespace Abilities {
             Toggle
         }
 
-        public enum ProcEffects {
+        public enum TargetScopes {
             Null,
-            Damage,
-            Heal,
-            AddStatus,
-            CleanseStatus
+            Untargeted,
+            SingleHero,
+            SingleEnemy,
+            SingleHeroOrEnemy,
+            AllHero,
+            AllEnemy,
+            AllHeroOrEnemy
         }
 
 
@@ -30,29 +34,42 @@ namespace Abilities {
 			get; set;
 		}
 
-        public AbilityTypes type {
+        public AbilityTypes abilityType {
             get; set;
         }
 
-        public ProcEffects effectOne {
+        public TargetScopes targetScope {
             get; set;
         }
 
-        public ProcEffects effectTwo {
+        public BattleObject currentTarget {
             get; set;
         }
 
-        public ProcEffects effectThree {
+        public bool targetChosen {
             get; set;
         }
 
-        public string target {
+
+        //Proc Effects
+        public bool damagesTarget {
+            get; set;
+        }
+
+        public bool healsTarget {
+            get; set;
+        }
+
+        public bool healsUser {
+            get; set;
+        }
+
+        public bool addsStatus {
             get; set;
         }
 
 
         //Durations
-
         public float chargeDuration {
             get; set;
         }
@@ -123,11 +140,15 @@ namespace Abilities {
 
 			name = "";
 			description = "";
-            type = AbilityTypes.Null;
-            effectOne = ProcEffects.Null;
-            effectTwo = ProcEffects.Null;
-            effectThree = ProcEffects.Null;
-            target = "";
+            abilityType = AbilityTypes.Null;
+            targetScope = TargetScopes.Null;
+            currentTarget = null;
+            targetChosen = false;
+
+            damagesTarget = false;
+            healsTarget = false;
+            healsUser = false;
+            addsStatus = false;
 
             chargeDuration = 1.0f;
 			abilityDuration = 1.0f;

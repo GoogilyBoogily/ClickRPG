@@ -8,11 +8,8 @@ public class NullAbility : Ability {
 
         name = "Null Ability";
         description = "For when you just gotta do nothin'.";
-        type = AbilityTypes.Null;
-        effectOne = ProcEffects.Null;
-        effectTwo = ProcEffects.Null;
-        effectThree = ProcEffects.Null;
-        target = "Single";
+        abilityType = AbilityTypes.Null;
+        targetScope = TargetScopes.Null;
 
         chargeDuration = 0.0f;
         abilityDuration = 0.0f;

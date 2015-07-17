@@ -7,10 +7,11 @@ public class HealingPunch : Ability {
     public HealingPunch() {
 
         name = "Healing Punch";
-        description = "Punch yourself so hard that it feels good!";
-        type = AbilityTypes.Burst;
-        effectOne = ProcEffects.Heal;
-        target = "Single";
+        description = "Punch someone so hard that it feels good!";
+        abilityType = AbilityTypes.Burst;
+        targetScope = TargetScopes.SingleHero;
+
+        healsTarget = true;
 
         chargeDuration = 2.0f;
         abilityDuration = 1.0f;

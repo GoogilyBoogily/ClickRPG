@@ -8,9 +8,10 @@ public class ChargePunch : Ability {
 
         name = "Charge Punch";
         description = "A big ol' punch. Hurts like the dickens.";
-        type = AbilityTypes.Burst;
-        effectOne = ProcEffects.Damage;
-        target = "Single";
+        abilityType = AbilityTypes.Burst;
+        targetScope = TargetScopes.SingleEnemy;
+
+        damagesTarget = true;
 
         chargeDuration = 2.0f;
         abilityDuration = 1.0f;
