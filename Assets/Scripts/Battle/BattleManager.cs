@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using BattleObjects;
 using Heroes;
 using Enemies;
@@ -8,27 +9,45 @@ using Abilities;
 
 public class BattleManager : MonoBehaviour {
 
-    //Init a battleTimer to keep track of time (all time-based things use this)
+    public TestHero heroObjectOne = new TestHero();
+    public TestHero2 heroObjectTwo = new TestHero2();
+
+    public MonsterMallow enemyObjectOne = new MonsterMallow();
+    public Kangaremu enemyObjectTwo = new Kangaremu();
+
+    Queue battleQueue = new Queue();
+    Queue multipleTargetQueue = new Queue();
 
     float battleTimer = 0.0f;
-    
-    //Init queues for heroes and monsters, and variables for use in the queues
-    
-    Queue battleQueue = new Queue();
-    
+
     bool doesBennetSuck = true;
 
-    // Init player & enemy objects
-
-    TestHero heroObjectOne = new TestHero();
-    TestHero2 heroObjectTwo = new TestHero2();
-
-    MonsterMallow enemyObjectOne = new MonsterMallow();
-    Kangaremu enemyObjectTwo = new Kangaremu();
-
     Hero selectedHero;
+
     BattleObject actingBattleObject;
-    
+
+    BattleObject allHeroes;
+    BattleObject allEnemies;
+
+    List<BattleObject> battleObjectList = new List<BattleObject>();
+    List<Hero> heroList = new List<Hero>();
+    List<Enemy> enemyList = new List<Enemy>();
+
+    public BattleManager() {
+
+        battleObjectList.Add(heroObjectOne);
+        battleObjectList.Add(heroObjectTwo);
+        battleObjectList.Add(enemyObjectOne);
+        battleObjectList.Add(enemyObjectTwo);
+
+        heroList.Add(heroObjectOne);
+        heroList.Add(heroObjectTwo);
+
+        enemyList.Add(enemyObjectOne);
+        enemyList.Add(enemyObjectTwo);
+
+    }
+
 
     // Use this for initialization
     void Start() {
@@ -55,6 +74,8 @@ public class BattleManager : MonoBehaviour {
         Debug.Log(enemyObjectTwo.name + "'s Health: " + enemyObjectTwo.currentHealth);
 
         selectedHero = heroObjectOne;
+
+        Debug.Log(battleObjectList.Count);
 
 
     }   // end Start()
@@ -140,9 +161,11 @@ public class BattleManager : MonoBehaviour {
                         if (battleTimer > selectedHero.abilities[1].cooldownEndTimer) {
 
                             selectedHero.currentAbility = selectedHero.abilities[1];
-                            Debug.Log("Select a Target for " + selectedHero.currentAbility.name + " (press o, p, n or m)");
 
-                            selectedHero.currentAbility.chargeStartTimer = battleTimer;
+                            if (selectedHero.currentAbility.targetScope == (Ability.TargetScopes.SingleEnemy | Ability.TargetScopes.SingleHero)) {
+                                Debug.Log("Select a Target! ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
+                            }
+
                             selectedHero.currentBattleState = Hero.BattleStates.Target;
                         } 
                         
@@ -157,9 +180,11 @@ public class BattleManager : MonoBehaviour {
                     if (battleTimer > selectedHero.abilities[2].cooldownEndTimer) {
 
                             selectedHero.currentAbility = selectedHero.abilities[2];
-                            Debug.Log("Select a Target! ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
 
-                            selectedHero.currentAbility.chargeStartTimer = battleTimer;
+                            if (selectedHero.currentAbility.targetScope == (Ability.TargetScopes.SingleEnemy | Ability.TargetScopes.SingleHero)) {
+                                Debug.Log("Select a Target! ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
+                            }
+
                             selectedHero.currentBattleState = Hero.BattleStates.Target;
                         } 
                         
@@ -173,11 +198,14 @@ public class BattleManager : MonoBehaviour {
                     
                     if (battleTimer > selectedHero.abilities[3].cooldownEndTimer) {
 
-                            selectedHero.currentAbility = selectedHero.abilities[3];
-                            Debug.Log("Select a Target! ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
+                        selectedHero.currentAbility = selectedHero.abilities[3];
 
-                            selectedHero.currentAbility.chargeStartTimer = battleTimer;
-                            selectedHero.currentBattleState = Hero.BattleStates.Target;
+                        if (selectedHero.currentAbility.targetScope == (Ability.TargetScopes.SingleEnemy | Ability.TargetScopes.SingleHero)) {
+                            Debug.Log("Select a Target! ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
+                        }
+
+                        selectedHero.currentBattleState = Hero.BattleStates.Target;
+
                         } 
                         
                         else {
@@ -199,39 +227,65 @@ public class BattleManager : MonoBehaviour {
                             if (enemyObjectOneTargeted) {
                                 actingBattleObject.currentAbility.currentTarget = enemyObjectOne;
                                 actingBattleObject.currentAbility.targetChosen = true;
+                                selectedHero.currentAbility.chargeStartTimer = battleTimer;
                             }
 
                             else if (enemyObjectTwoTargeted) {
                                 actingBattleObject.currentAbility.currentTarget = enemyObjectTwo;
                                 actingBattleObject.currentAbility.targetChosen = true;
+                                selectedHero.currentAbility.chargeStartTimer = battleTimer;
                             }
 
                         } //end if single enemy
+
 
                         if (actingBattleObject.currentAbility.targetScope == Ability.TargetScopes.SingleHero) {
 
                             if (heroObjectOneTargeted) {
                                 actingBattleObject.currentAbility.currentTarget = heroObjectOne;
                                 actingBattleObject.currentAbility.targetChosen = true;
+                                selectedHero.currentAbility.chargeStartTimer = battleTimer;
                             }
 
                             else if (heroObjectTwoTargeted) {
                                 actingBattleObject.currentAbility.currentTarget = heroObjectTwo;
                                 actingBattleObject.currentAbility.targetChosen = true;
+                                selectedHero.currentAbility.chargeStartTimer = battleTimer;
                             }
 
                         } //end if single hero
+
+
+                        if (actingBattleObject.currentAbility.targetScope == Ability.TargetScopes.AllHeroes) {
+                            actingBattleObject.currentAbility.currentTarget = allHeroes;
+                            actingBattleObject.currentAbility.targetChosen = true;
+                            selectedHero.currentAbility.chargeStartTimer = battleTimer;
+                            
+                            
+                        } //end if all heroes
+
+
+                        if (actingBattleObject.currentAbility.targetScope == Ability.TargetScopes.AllEnemies) {
+                            actingBattleObject.currentAbility.currentTarget = allEnemies;
+                            actingBattleObject.currentAbility.targetChosen = true;
+                            selectedHero.currentAbility.chargeStartTimer = battleTimer;
+                            
+
+                        } //end if all Enemies
+
 
                         if (abilityCanceled) {
                             Debug.Log(actingBattleObject.currentAbility.name + " canceled!");
                             actingBattleObject.currentBattleState = BattleObject.BattleStates.Wait;
 
-                        }
+                        } //end if ability canceled
+
                     } //end if targetChosen == false
 
 
                     if (actingBattleObject.currentAbility.targetChosen == true) {
-                        Debug.Log("Charging " + actingBattleObject.currentAbility.name + " on " + actingBattleObject.currentAbility.currentTarget.name + "!");
+                         
+                       Debug.Log(actingBattleObject.name + " begins charging " + actingBattleObject.currentAbility.name + "!");
                         actingBattleObject.currentBattleState = BattleObject.BattleStates.Charge;
                         actingBattleObject.currentAbility.targetChosen = false;
                     }
@@ -266,27 +320,68 @@ public class BattleManager : MonoBehaviour {
 
                     if (actingBattleObject.currentAbility.damagesTarget) {
 
-                        actingBattleObject.currentAbility.currentTarget.currentHealth -= actingBattleObject.currentAbility.procDamage;
+                        if (actingBattleObject.currentAbility.targetScope == Ability.TargetScopes.SingleEnemy) {
 
-                        Debug.Log(actingBattleObject + " uses " + actingBattleObject.currentAbility.name + " on " + actingBattleObject.currentAbility.currentTarget + "!");
-                        Debug.Log(actingBattleObject.currentAbility.currentTarget.currentHealth);
+                            actingBattleObject.currentAbility.currentTarget.currentHealth -= actingBattleObject.currentAbility.procDamage;
+                            Debug.Log(actingBattleObject.currentAbility.currentTarget.currentHealth);
 
-                        actingBattleObject.currentAbility.procCounter++;
-                        actingBattleObject.currentAbility.lastProcTimer = battleTimer;
+                        } //end if single enemy
 
-                    } else if (actingBattleObject.currentAbility.healsTarget) {
 
-                        if (actingBattleObject.currentAbility.currentTarget.currentHealth + actingBattleObject.currentAbility.procHeal <= actingBattleObject.currentAbility.currentTarget.maxHealth) {
-                            actingBattleObject.currentAbility.currentTarget.currentHealth += actingBattleObject.currentAbility.procHeal;
-                        } 
+                        if (actingBattleObject.currentAbility.targetScope == Ability.TargetScopes.AllEnemies) {
+
+                            enemyList.ForEach(multipleTargetQueue.Enqueue);
+
+                            while (multipleTargetQueue.Count > 0) {
+
+                                actingBattleObject.currentAbility.currentTarget = (BattleObject)multipleTargetQueue.Peek();
+                                actingBattleObject.currentAbility.currentTarget.currentHealth -= actingBattleObject.currentAbility.procDamage;
+                                Debug.Log(actingBattleObject.currentAbility.currentTarget.name + "'s health: " + actingBattleObject.currentAbility.currentTarget.currentHealth);
+                                multipleTargetQueue.Dequeue();
+
+                            }
+
+                        } //end if all enemies
+
+                    } //end if damagesTarget
+                    
+                    else if (actingBattleObject.currentAbility.healsTarget) {
+
+                        if (actingBattleObject.currentAbility.targetScope == Ability.TargetScopes.SingleHero) {
+                            if (actingBattleObject.currentAbility.currentTarget.currentHealth + actingBattleObject.currentAbility.procHeal <= actingBattleObject.currentAbility.currentTarget.maxHealth) {
+                                actingBattleObject.currentAbility.currentTarget.currentHealth += actingBattleObject.currentAbility.procHeal;
+                            } 
                         
-                        else {
-                            actingBattleObject.currentAbility.currentTarget.currentHealth = actingBattleObject.maxHealth;
+                            else {
+                                actingBattleObject.currentAbility.currentTarget.currentHealth = actingBattleObject.maxHealth;
+                            }
+
+                            Debug.Log(actingBattleObject + " uses " + actingBattleObject.currentAbility.name + " on " + actingBattleObject.currentAbility.currentTarget + "!");
+                            Debug.Log(actingBattleObject.currentAbility.currentTarget.currentHealth);
                         }
 
-                        Debug.Log(actingBattleObject + " uses " + actingBattleObject.currentAbility.name + " on " + actingBattleObject.currentAbility.currentTarget + "!");
-                        Debug.Log(actingBattleObject.currentAbility.currentTarget.currentHealth);
-                    }
+                        else if (actingBattleObject.currentAbility.targetScope == Ability.TargetScopes.AllHeroes)
+                    
+                            heroList.ForEach(multipleTargetQueue.Enqueue);
+
+                            while (multipleTargetQueue.Count > 0) {
+
+                                actingBattleObject.currentAbility.currentTarget = (BattleObject)multipleTargetQueue.Peek();
+                                
+                                if (actingBattleObject.currentAbility.currentTarget.currentHealth + actingBattleObject.currentAbility.procHeal <= actingBattleObject.currentAbility.currentTarget.maxHealth) {
+                                    actingBattleObject.currentAbility.currentTarget.currentHealth += actingBattleObject.currentAbility.procHeal;
+                                }
+
+                                else {
+                                    actingBattleObject.currentAbility.currentTarget.currentHealth = actingBattleObject.maxHealth;
+                                }
+
+                                Debug.Log(actingBattleObject.currentAbility.currentTarget.name + "'s health: " + actingBattleObject.currentAbility.currentTarget.currentHealth);
+                                multipleTargetQueue.Dequeue();
+
+                            } //end queue while
+                      
+                    } //end if healsTarget
 
 
                     //Set cooldown timer
@@ -312,35 +407,87 @@ public class BattleManager : MonoBehaviour {
                     if ((battleTimer < (actingBattleObject.currentAbility.abilityStartTimer + actingBattleObject.currentAbility.abilityDuration)) &&
                         (actingBattleObject.currentAbility.procCounter < actingBattleObject.currentAbility.procLimit)) {
 
-                        //check if it's time to proc, and Enqueue the hero to proc if it is
+                        //check if it's time to proc, proc if so!
 
                         if (battleTimer >= (actingBattleObject.currentAbility.lastProcTimer + actingBattleObject.currentAbility.procSpacing)) {
 
                             if (actingBattleObject.currentAbility.damagesTarget) {
 
-                                actingBattleObject.currentAbility.currentTarget.currentHealth -= actingBattleObject.currentAbility.procDamage;
-                                Debug.Log(actingBattleObject.currentAbility.currentTarget.currentHealth);
+                                if (actingBattleObject.currentAbility.targetScope == Ability.TargetScopes.SingleEnemy) {
 
-                                actingBattleObject.currentAbility.procCounter++;
-                                actingBattleObject.currentAbility.lastProcTimer = battleTimer;
-                            } 
+                                    actingBattleObject.currentAbility.currentTarget.currentHealth -= actingBattleObject.currentAbility.procDamage;
+
+                                    Debug.Log(actingBattleObject.currentAbility.currentTarget + "'s health: " + actingBattleObject.currentAbility.currentTarget.currentHealth);
+
+                                    actingBattleObject.currentAbility.procCounter++;
+                                    actingBattleObject.currentAbility.lastProcTimer = battleTimer;
+
+                                } //end if single enemy damage
+
+                                if (actingBattleObject.currentAbility.targetScope == Ability.TargetScopes.AllEnemies) {
+
+                                    enemyList.ForEach(multipleTargetQueue.Enqueue);
+
+                                    while (multipleTargetQueue.Count > 0) {
+
+                                        actingBattleObject.currentAbility.currentTarget = (BattleObject)multipleTargetQueue.Peek();
+                                        actingBattleObject.currentAbility.currentTarget.currentHealth -= actingBattleObject.currentAbility.procDamage;
+                                        Debug.Log(actingBattleObject.currentAbility.currentTarget.name + "'s health: " + actingBattleObject.currentAbility.currentTarget.currentHealth);
+                                        multipleTargetQueue.Dequeue();
+
+                                    } //end queue while
+
+                                    actingBattleObject.currentAbility.procCounter++;
+                                    actingBattleObject.currentAbility.lastProcTimer = battleTimer;
+
+                                } //end if all enemies damage
                             
+                            } //end if damages target
+
                             else if (actingBattleObject.currentAbility.healsTarget) {
 
-                                 if (actingBattleObject.currentAbility.currentTarget.currentHealth + actingBattleObject.currentAbility.procHeal <= actingBattleObject.currentAbility.currentTarget.maxHealth) {
-                                    actingBattleObject.currentAbility.currentTarget.currentHealth += actingBattleObject.currentAbility.procHeal;
-                                 } 
-                        
-                                 else {
-                                    actingBattleObject.currentAbility.currentTarget.currentHealth = actingBattleObject.maxHealth;
-                                 }
+                                if (actingBattleObject.currentAbility.targetScope == Ability.TargetScopes.SingleHero) { 
 
-                                Debug.Log(actingBattleObject.currentAbility.currentTarget.currentHealth);
-                        
-                            }
+                                    if (actingBattleObject.currentAbility.currentTarget.currentHealth + actingBattleObject.currentAbility.procHeal <= actingBattleObject.currentAbility.currentTarget.maxHealth) {
+                                        actingBattleObject.currentAbility.currentTarget.currentHealth += actingBattleObject.currentAbility.procHeal;
+                                    }
 
-                                actingBattleObject.currentAbility.procCounter++;
-                                actingBattleObject.currentAbility.lastProcTimer = battleTimer;
+                                    else {
+                                        actingBattleObject.currentAbility.currentTarget.currentHealth = actingBattleObject.maxHealth;
+                                    }
+
+                                    Debug.Log(actingBattleObject.currentAbility.currentTarget.currentHealth);
+
+                                } //end if single hero heal
+
+                                else if (actingBattleObject.currentAbility.targetScope == Ability.TargetScopes.AllHeroes) {
+
+                                    heroList.ForEach(multipleTargetQueue.Enqueue);
+
+                                    while (multipleTargetQueue.Count > 0) {
+
+                                        actingBattleObject.currentAbility.currentTarget = (BattleObject)multipleTargetQueue.Peek();
+
+                                        if (actingBattleObject.currentAbility.currentTarget.currentHealth + actingBattleObject.currentAbility.procHeal <= actingBattleObject.currentAbility.currentTarget.maxHealth) {
+                                            actingBattleObject.currentAbility.currentTarget.currentHealth += actingBattleObject.currentAbility.procHeal;
+                                        }
+
+                                        else {
+                                            actingBattleObject.currentAbility.currentTarget.currentHealth = actingBattleObject.maxHealth;
+                                        }
+
+                                        Debug.Log(actingBattleObject.currentAbility.currentTarget.name + "'s health: " + actingBattleObject.currentAbility.currentTarget.currentHealth);
+                                        multipleTargetQueue.Dequeue();
+
+                                    } // end queue while
+
+                                } //end if all heroes heal
+
+                            } //end if heals target
+
+                            actingBattleObject.currentAbility.procCounter++;
+                            actingBattleObject.currentAbility.lastProcTimer = battleTimer;
+                            
 
                         } //end if (proc checks/stuff)
 
@@ -367,7 +514,6 @@ public class BattleManager : MonoBehaviour {
                             //I have no idea why this isn't working; every other setting to abilities has worked this way, but it doesn't like NullAbility.
 
                         actingBattleObject.currentAbility = null;
-                        actingBattleObject.currentAbility.currentTarget = null;
                         actingBattleObject.currentBattleState = BattleObject.BattleStates.Wait;
 
                     }

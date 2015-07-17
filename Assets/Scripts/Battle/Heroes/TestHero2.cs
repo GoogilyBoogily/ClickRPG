@@ -54,8 +54,8 @@ public class TestHero2 : Hero {
 
         abilities.Add(new NullAbility());
         abilities.Add(new FireBall());
-        abilities.Add(new HealingPunch());
         abilities.Add(new FirePwnage());
+        abilities.Add(new HealWave());
        
     } // end constructor
 }

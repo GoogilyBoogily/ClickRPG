@@ -19,9 +19,9 @@ namespace Abilities {
             SingleHero,
             SingleEnemy,
             SingleHeroOrEnemy,
-            AllHero,
-            AllEnemy,
-            AllHeroOrEnemy
+            AllHeroes,
+            AllEnemies,
+            AllHeroesAndEnemies
         }
 
 

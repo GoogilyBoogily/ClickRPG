@@ -9,7 +9,7 @@ public class FirePwnage : Ability {
         name = "Fire Pwnage";
         description = "OH GOD THIS IS ENOUGH FIRE TO KILL AT LEAST ALL OF THE SPIDERS EVER.";
         abilityType = AbilityTypes.Barrage;
-        targetScope = TargetScopes.SingleEnemy;
+        targetScope = TargetScopes.AllEnemies;
 
         damagesTarget = true;
 
@@ -22,7 +22,7 @@ public class FirePwnage : Ability {
         procCounter = 0;
         procLimit = 1000;
 
-        procSpacing = 0.20f;
+        procSpacing = 0.5f;
         procDamage = 12.0f;
 
         resource = "";

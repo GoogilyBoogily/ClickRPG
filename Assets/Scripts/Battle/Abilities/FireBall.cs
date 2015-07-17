@@ -9,7 +9,7 @@ public class FireBall : Ability {
         name = "Fire Ball";
         description = "OMG DAT CHICK JUST MADE FIRE WID HER HANDS.";
         abilityType = AbilityTypes.Burst;
-        targetScope = TargetScopes.SingleEnemy;
+        targetScope = TargetScopes.AllEnemies;
 
         damagesTarget = true;
 

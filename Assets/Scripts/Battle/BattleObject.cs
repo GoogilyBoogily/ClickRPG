@@ -7,6 +7,27 @@ namespace BattleObjects {
 
     public class BattleObject {
 
+        //List of battle states
+        public enum BattleStates {
+            Initializing,
+            Wait,
+            Target,
+            Charge,
+            Burst,
+            Barrage,
+            Uncharge,
+            Dead
+        } // end BattleStates enum
+
+
+        //List of Target types
+        public enum TargetTypes {
+            HeroTarget,
+            HeroTargetStealthed,
+            EnemyTarget
+        } //end TargetTypes enum
+
+
         public string name {
 			get; set;
     }
@@ -15,7 +36,7 @@ namespace BattleObjects {
             get; set;
         }
 
-        public string targetType {
+        public TargetTypes targetType {
             get; set;
         }
 
@@ -103,29 +124,6 @@ namespace BattleObjects {
         public float resolve {
             get;  set;
         }
-
-
-
-        //List of battle states
-
-        public enum BattleStates {
-            Initializing,
-            Wait,
-            Target,
-            Charge,
-            Burst,
-            Barrage,
-            Uncharge,
-            Dead
-        } // end BattleStates enum
-
-
-        //List of ability types
-        public enum TargetTypes {
-            HeroTarget,
-            HeroTargetStealthed,
-            EnemyTarget
-        } //end TargetTypes enum
 
 
         //Variables to keep track of current things

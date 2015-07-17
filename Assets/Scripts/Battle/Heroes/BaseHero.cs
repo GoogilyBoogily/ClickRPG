@@ -9,7 +9,7 @@ namespace Heroes {
 
         public Hero() {
 
-            targetType = "Hero";
+            targetType = TargetTypes.HeroTarget;
 
             //Notice that there's not much here yet - that's because it all inherits from BattleObject,
             //and heroes and enemies share a lot of those qualities. 

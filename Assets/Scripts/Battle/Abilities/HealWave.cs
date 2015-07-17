@@ -2,29 +2,29 @@
 using System.Collections;
 using Abilities;
 
-public class HealingPunch : Ability {
+public class HealWave : Ability {
 
-    public HealingPunch() {
+    public HealWave() {
 
-        name = "Healing Punch";
-        description = "Punch everyone so hard that it feels good!";
-        abilityType = AbilityTypes.Burst;
+        name = "Heal Wave";
+        description = "Waves of healing! So nice!";
+        abilityType = AbilityTypes.Barrage;
         targetScope = TargetScopes.AllHeroes;
 
         healsTarget = true;
 
-        chargeDuration = 2.0f;
-        abilityDuration = 1.0f;
+        chargeDuration = 3.0f;
+        abilityDuration = 5.0f;
 
         chargeStartTimer = 0.0f;
         abilityStartTimer = 0.0f;
         lastProcTimer = 0.0f;
         procCounter = 0;
-        procLimit = 1;
+        procLimit = 1000;
 
-        procSpacing = 2.0f;
+        procSpacing = 1.0f;
         procDamage = 0.0f;
-        procHeal = 200.0f;
+        procHeal = 70.0f;
 
         resource = "";
         cost = 0.0f;
