@@ -168,7 +168,8 @@ namespace Abilities {
             cooldown = 1.0f;
             cooldownEndTimer = 0.0f;
 
-        } // end constructor()
+        } // end constructor
 
     } // end class
+
 } // end namespace
