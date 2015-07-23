@@ -12,6 +12,8 @@ public class EndlessPunches : Ability {
         abilityType = AbilityTypes.InfBarrage;
         targetScope = TargetScopes.SingleEnemy;
 
+        hasCharge = false;
+
         damagesTarget = true;
 
         chargeDuration = 0.0f;
@@ -25,7 +27,7 @@ public class EndlessPunches : Ability {
         procLimit = 1000;
 
         procSpacing = 1.0f;
-        procDamage = 30.0f;
+        procDamage = 20.0f;
         procHeal = 0.0f;
 
         resource = "";

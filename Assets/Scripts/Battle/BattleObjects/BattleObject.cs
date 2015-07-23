@@ -15,6 +15,8 @@ namespace BattleObjects {
             Charge,
             Burst,
             Barrage,
+            InfCharge,
+            InfBarrage,
             Uncharge,
             Dead
         } // end BattleStates enum
@@ -142,6 +144,6 @@ namespace BattleObjects {
 
         public List<Ability> abilities;
 
-       
+        public bool commandIssued;
     }
 }

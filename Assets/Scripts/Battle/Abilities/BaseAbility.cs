@@ -46,10 +46,15 @@ namespace Abilities {
             get; set;
         }
 
+        //Ability bools - the ones not handled by the AbilityTypes I guess
+
         public bool targetChosen {
             get; set;
         }
 
+        public bool hasCharge {
+            get; set;
+        }
 
         //Proc Effects
         public bool damagesTarget {
@@ -144,6 +149,8 @@ namespace Abilities {
             targetScope = TargetScopes.Null;
             currentTarget = null;
             targetChosen = false;
+
+            hasCharge = true;
 
             damagesTarget = false;
             healsTarget = false;

@@ -9,13 +9,13 @@ public class FirePwnage : Ability {
         name = "Fire Pwnage";
         description = "OH GOD THIS IS ENOUGH FIRE TO KILL AT LEAST ALL OF THE SPIDERS EVER.";
         
-        abilityType = AbilityTypes.Barrage;
+        abilityType = AbilityTypes.InfBarrage;
         targetScope = TargetScopes.AllEnemies;
 
         damagesTarget = true;
 
-        chargeDuration = 4.0f;
-        abilityDuration = 3.0f;
+        chargeDuration = 3.0f;
+        abilityDuration = 0.0f;
 
         chargeStartTimer = 0.0f;
         abilityStartTimer = 0.0f;
@@ -23,12 +23,12 @@ public class FirePwnage : Ability {
         procCounter = 0;
         procLimit = 1000;
 
-        procSpacing = 0.5f;
-        procDamage = 12.0f;
+        procSpacing = 1.4f;
+        procDamage = 30.0f;
 
         resource = "";
         cost = 0.0f;
-        cooldown = 3.0f;
+        cooldown = 0.0f;
         cooldownEndTimer = 0.0f;
 
     } //end constructor()
