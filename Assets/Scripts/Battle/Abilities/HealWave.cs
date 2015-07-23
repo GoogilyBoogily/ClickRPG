@@ -8,6 +8,7 @@ public class HealWave : Ability {
 
         name = "Heal Wave";
         description = "Waves of healing! So nice!";
+
         abilityType = AbilityTypes.Barrage;
         targetScope = TargetScopes.AllHeroes;
 
@@ -23,7 +24,6 @@ public class HealWave : Ability {
         procLimit = 1000;
 
         procSpacing = 1.0f;
-        procDamage = 0.0f;
         procHeal = 70.0f;
 
         resource = "";

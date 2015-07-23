@@ -8,6 +8,7 @@ public class FirePwnage : Ability {
 
         name = "Fire Pwnage";
         description = "OH GOD THIS IS ENOUGH FIRE TO KILL AT LEAST ALL OF THE SPIDERS EVER.";
+        
         abilityType = AbilityTypes.Barrage;
         targetScope = TargetScopes.AllEnemies;
 
