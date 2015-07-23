@@ -16,7 +16,5 @@ namespace Enemies {
             //This script is just for things that make a hero a hero.
 
         }
-
-        public List<Ability> abilities;
     }
 }

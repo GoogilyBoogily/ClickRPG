@@ -17,11 +17,11 @@ namespace Heroes {
 
         }
 
-        public List<Ability> abilities;
-
         public float maxMana;
         public float currentMana;
         public float manaRegen;
+
+        public BattleObject queuedTarget;
     
     }
     

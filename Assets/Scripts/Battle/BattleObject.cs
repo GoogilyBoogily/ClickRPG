@@ -138,6 +138,7 @@ namespace BattleObjects {
 
         
         public Ability currentAbility;
+        public Ability targetedAbility;
 
         public List<Ability> abilities;
 
