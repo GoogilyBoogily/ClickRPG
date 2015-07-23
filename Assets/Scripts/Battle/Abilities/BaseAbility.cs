@@ -83,8 +83,8 @@ namespace Abilities {
 			get; set;
 		}
 
-
-        //Timers & Counters
+  
+        //Timers
 
         public float chargeStartTimer {
             get; set;
@@ -94,19 +94,23 @@ namespace Abilities {
             get; set;
         }
 
+        public float infChargeTimer {
+            get; set;
+        }
+
         public float lastProcTimer {
             get; set;
         }
        
+
+        //Proc handlings
+
         public int procCounter {
             get; set;
         }
         public int procLimit {
             get; set;
         }
-
-
-        //Proc handlings
 
         public float procSpacing {
             get; set;
@@ -116,10 +120,17 @@ namespace Abilities {
             get; set;
         }
 
+        public float infProcDamage {
+            get; set;
+        }
+
         public float procHeal {
             get; set;
         }
 
+        public float infProcHeal {
+            get; set;
+        }
 
         //Resource management
 
@@ -161,14 +172,18 @@ namespace Abilities {
 			abilityDuration = 1.0f;
 
             chargeStartTimer = 0.0f;
+            infChargeTimer = 0.0f;
             abilityStartTimer = 0.0f;
             lastProcTimer = 0.0f;
+
             procCounter = 0;
             procLimit = 1;
-
 			procSpacing = 1.0f;
+
             procDamage = 0.0f;
+            infProcDamage = 0.0f;
             procHeal = 0.0f;
+            infProcHeal = 0.0f;
 
 			resource = "";
 			cost = 10.0f;

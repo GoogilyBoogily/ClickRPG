@@ -15,8 +15,8 @@ namespace BattleObjects {
             Charge,
             Burst,
             Barrage,
-            InfCharge,
             InfBarrage,
+            InfCharge,
             Uncharge,
             Dead
         } // end BattleStates enum

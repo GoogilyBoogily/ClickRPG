@@ -8,22 +8,24 @@ public class FireBall : Ability {
 
         name = "Fire Ball";
         description = "OMG DAT CHICK JUST MADE FIRE WID HER HANDS.";
-        abilityType = AbilityTypes.Burst;
-        targetScope = TargetScopes.AllEnemies;
+        abilityType = AbilityTypes.InfCharge;
+        targetScope = TargetScopes.SingleEnemy;
 
         damagesTarget = true;
 
-        chargeDuration = 4.0f;
+        chargeDuration = 0.0f;
         abilityDuration = 0.0f;
 
         chargeStartTimer = 0.0f;
+        infChargeTimer = 0.0f;
         abilityStartTimer = 0.0f;
         lastProcTimer = 0.0f;
+
         procCounter = 0;
         procLimit = 1000;
-
         procSpacing = 0.0f;
-        procDamage = 250.0f;
+        procDamage = 50;
+        infProcDamage = 0;
 
         resource = "";
         cost = 0.0f;
