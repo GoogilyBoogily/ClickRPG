@@ -56,6 +56,11 @@ namespace Abilities {
             get; set;
         }
 
+        public bool retainsInfCharge {
+            get; set;
+        }
+
+
         //Proc Effects
         public bool damagesTarget {
             get; set;
@@ -162,6 +167,7 @@ namespace Abilities {
             targetChosen = false;
 
             hasCharge = true;
+            retainsInfCharge = false;
 
             damagesTarget = false;
             healsTarget = false;

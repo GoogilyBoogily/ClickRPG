@@ -53,9 +53,9 @@ public class TestHero2 : Hero {
         abilities = new List<Ability>(7);
 
         abilities.Add(new NullAbility());
-        abilities.Add(new FireBall());
         abilities.Add(new FirePwnage());
-        abilities.Add(new HealWave());
+        abilities.Add(new FireBall());
+        abilities.Add(new ChargePunch());
        
     } // end constructor
 }

@@ -9,8 +9,8 @@ public class TestHero : Hero {
 
 	public TestHero() {
 
-        name = "Sir Testalot";
-		description = "I like butts. And testing.";
+        name = "Punch Man";
+		description = "My mind is telling me 'no.' But my BODDAYYY.";
 
         //Hero Stats
 
@@ -58,7 +58,7 @@ public class TestHero : Hero {
 
         abilities.Add(new NullAbility());
         abilities.Add(new EndlessPunches());
-        abilities.Add(new ChargePunch());
+        abilities.Add(new LargestPunch());
         abilities.Add(new PunchBarrage());
         
 

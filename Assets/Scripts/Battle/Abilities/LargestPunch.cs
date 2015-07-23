@@ -2,16 +2,17 @@
 using System.Collections;
 using Abilities;
 
-public class FireBall : Ability {
+public class LargestPunch : Ability {
 
-    public FireBall() {
+    public LargestPunch() {
 
-        name = "Fire Ball";
-        description = "OMG DAT CHICK JUST MADE FIRE WID HER HANDS. But she has to start charging again each time :/";
+        name = "Largest Punch";
+        description = "Makes Donkey Kong's neutral B attack look like tiny little hungry girl hitting brick wall. Retains charge if canceled.";
         abilityType = AbilityTypes.InfCharge;
         targetScope = TargetScopes.SingleEnemy;
 
         damagesTarget = true;
+        retainsInfCharge = true;
 
         chargeDuration = 0.0f;
         abilityDuration = 0.0f;
@@ -24,7 +25,7 @@ public class FireBall : Ability {
         procCounter = 0;
         procLimit = 1000;
         procSpacing = 0.0f;
-        procDamage = 100;
+        procDamage = 60;
         infProcDamage = 0;
 
         resource = "";
