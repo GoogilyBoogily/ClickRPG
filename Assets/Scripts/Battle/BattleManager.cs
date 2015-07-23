@@ -35,8 +35,6 @@ public class BattleManager : MonoBehaviour {
     List<Hero> heroList = new List<Hero>();
     List<Enemy> enemyList = new List<Enemy>();
 
-    //[SerializeField]
-    //private Button enemyOneClicked = null;
 
     public bool enemyOneClicked = false;
     public bool enemyTwoClicked = false;
@@ -49,10 +47,8 @@ public class BattleManager : MonoBehaviour {
         enemyTwoClicked = true;
         Debug.Log("Way to click on that enemyTwo! Splendid!");
     }
-        
-
-
-
+     
+      
     public BattleManager() {
 
         battleObjectList.Add(heroObjectOne);
@@ -68,10 +64,6 @@ public class BattleManager : MonoBehaviour {
 
     }
 
-    
-
-    
-    
 
     void OnGUI() {
 
@@ -199,7 +191,7 @@ public class BattleManager : MonoBehaviour {
                     if (actingBattleObject.commandIssued == true) {
 
                         if (selectedHero.queuedAbility.targetScope == (Ability.TargetScopes.SingleEnemy | Ability.TargetScopes.SingleHero)) {
-                            Debug.Log("Select a Target! TRY CLICKING. ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
+                            Debug.Log("Select a Target! ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
                         }
 
                         selectedHero.currentBattleState = Hero.BattleStates.Target;
