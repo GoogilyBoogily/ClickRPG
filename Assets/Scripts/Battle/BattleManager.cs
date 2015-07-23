@@ -46,8 +46,13 @@ public class BattleManager : MonoBehaviour {
         enemyTwoClicked = true;
         Debug.Log("Way to click on that enemyTwo! Splendid!");
     }
-     
 
+    public Text HeroOneHealthDisplay;
+    public Text HeroTwoHealthDisplay;
+
+    public Text EnemyOneHealthDisplay;
+    public Text EnemyTwoHealthDisplay;
+   
       
     public BattleManager() {
 
@@ -67,6 +72,11 @@ public class BattleManager : MonoBehaviour {
 
     void OnGUI() {
 
+        //This is seriously the old, shitty way of doing this. I'm doing it to make testing a little easier, 
+        //but we REALLY need to use the new UI system. It takes some getting used to, but I figured out
+        //some of the very basics (those buttons that don't do much, that is).
+
+       
         GUI.Label(new Rect(10, 10, 120, 20), selectedHero.name.ToString());
         GUI.Label(new Rect(10, 40, 120, 20), selectedHero.currentBattleState.ToString());
         GUI.Label(new Rect(10, 70, 120, 20), selectedHero.queuedAbility.name.ToString());
@@ -106,7 +116,11 @@ public class BattleManager : MonoBehaviour {
             selectedHero = heroObjectOne;
         }
 
-        Debug.Log(battleObjectList.Count);
+        //tying stuff to health bars...it worked, but then each one ran BattleManager. 
+        //I guess I could make a script that just handles things being passed to the GUI...bleh. I mean I totally can,
+        //But that strikes me as a dumb way to do it.
+
+        
 
 
     }   // end Start()
@@ -131,6 +145,15 @@ public class BattleManager : MonoBehaviour {
         bool enemyObjectTwoTargeted = Input.GetButtonDown("Enemy Two Target");
 
         bool abilityCanceled = Input.GetButtonDown("Cancel Ability");
+
+
+        //Displaying health numbers! Fun.
+
+        HeroOneHealthDisplay.text = heroObjectOne.name.ToString() + "'s health: " + heroObjectOne.currentHealth.ToString();
+        HeroTwoHealthDisplay.text = heroObjectTwo.name.ToString() + "'s health: " + heroObjectTwo.currentHealth.ToString();
+
+        EnemyOneHealthDisplay.text = enemyObjectOne.name.ToString() + "'s health: " + enemyObjectOne.currentHealth.ToString();
+        EnemyTwoHealthDisplay.text = enemyObjectTwo.name.ToString() + "'s health: " + enemyObjectTwo.currentHealth.ToString();
 
 
         //Controls for hero selection
