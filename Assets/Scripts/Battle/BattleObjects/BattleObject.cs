@@ -5,7 +5,7 @@ using Abilities;
 
 namespace BattleObjects {
 
-    public class BattleObject {
+    public class BattleObject : Object {
 
         //List of battle states
         public enum BattleStates {

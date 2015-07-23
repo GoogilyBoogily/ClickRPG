@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
+
 using BattleObjects;
 using Heroes;
 using Enemies;
@@ -32,6 +35,24 @@ public class BattleManager : MonoBehaviour {
     List<Hero> heroList = new List<Hero>();
     List<Enemy> enemyList = new List<Enemy>();
 
+    //[SerializeField]
+    //private Button enemyOneClicked = null;
+
+    public bool enemyOneClicked = false;
+    public bool enemyTwoClicked = false;
+
+    public void EnemyOneClicked() {
+        enemyOneClicked = true;
+        Debug.Log("Way to click on that enemyOne! Nice!");
+    }
+    public void EnemyTwoClicked() {
+        enemyTwoClicked = true;
+        Debug.Log("Way to click on that enemyTwo! Splendid!");
+    }
+        
+
+
+
     public BattleManager() {
 
         battleObjectList.Add(heroObjectOne);
@@ -44,13 +65,24 @@ public class BattleManager : MonoBehaviour {
 
         enemyList.Add(enemyObjectOne);
         enemyList.Add(enemyObjectTwo);
+
     }
 
+    
+
+    
+    
+
     void OnGUI() {
+
         GUI.Label(new Rect(10, 10, 120, 20), selectedHero.currentBattleState.ToString());
         GUI.Label(new Rect(10, 40, 120, 20), selectedHero.queuedAbility.name.ToString());
         GUI.Label(new Rect(10, 70, 120, 20), selectedHero.currentAbility.name.ToString());
+  
     }
+
+
+
 
     // Use this for initialization
     void Start() {
@@ -167,7 +199,7 @@ public class BattleManager : MonoBehaviour {
                     if (actingBattleObject.commandIssued == true) {
 
                         if (selectedHero.queuedAbility.targetScope == (Ability.TargetScopes.SingleEnemy | Ability.TargetScopes.SingleHero)) {
-                            Debug.Log("Select a Target! ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
+                            Debug.Log("Select a Target! TRY CLICKING. ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
                         }
 
                         selectedHero.currentBattleState = Hero.BattleStates.Target;
