@@ -249,6 +249,7 @@ public class BattleManager : MonoBehaviour {
 
                             actingBattleObject.currentAbility = (Ability)actingBattleObject.queuedAbility;
                             actingBattleObject.currentBattleState = BattleObject.BattleStates.InfCharge;
+                            actingBattleObject.currentAbility.isLocked = true;
                         }
 
                         else {
@@ -263,19 +264,7 @@ public class BattleManager : MonoBehaviour {
 
 
 
-                case (BattleObject.BattleStates.Target): //targetj
-
-                    /*
-                    if (actingBattleObject.queuedAbility.targetScope == Ability.TargetScopes.Null) {
-                        actingBattleObject.currentBattleState = BattleObject.BattleStates.Wait;
-                    }
-
-                     */
-                      
-                    //SEAN YOU DIRTY IDIOT GO BACK AND FIX THIS. WITHOUT THE PREVIOUS TWO LINES, ANY ABILITY FOLLOWING AN 
-                    //INFBARRAGE DUMPS YOU INTO BATTLESTATES.TARGET WITH NULL ABILITY. NOT OKAY. JUST BECAUSE YOU FIXED IT
-                    //DOESN'T MEAN YOU'RE NOT AN IDIOT. JUST BECAUSE IT'S WORKING DOESN'T MEAN YOU DON'T SUCK.
-
+                case (BattleObject.BattleStates.Target): //jtar
 
                     if (actingBattleObject == selectedHero) {
 
@@ -399,13 +388,12 @@ public class BattleManager : MonoBehaviour {
                     break; //end Charge case
 
 
-                case (BattleObject.BattleStates.Burst): //burstj
+                case (BattleObject.BattleStates.Burst): //jburst
 
                     if (actingBattleObject.currentAbility.damagesTarget) {
 
                         if (actingBattleObject.currentAbility.abilityType == Ability.AbilityTypes.InfCharge) {
                             actingBattleObject.currentAbility.infProcDamage = (actingBattleObject.currentAbility.procDamage * actingBattleObject.currentAbility.infChargeTimer);
-                            actingBattleObject.queuedAbility = actingBattleObject.abilities[0];
                         }
 
 
@@ -425,7 +413,7 @@ public class BattleManager : MonoBehaviour {
                         } //end if single enemy
 
 
-                        if (actingBattleObject.currentAbility.targetScope == Ability.TargetScopes.AllEnemies) {
+                        else if (actingBattleObject.currentAbility.targetScope == Ability.TargetScopes.AllEnemies) {
 
                             enemyList.ForEach(multipleTargetQueue.Enqueue);
 
@@ -507,21 +495,28 @@ public class BattleManager : MonoBehaviour {
 
                     //HERE is where we have gotten through what the ability does, and we reset everything.
 
-                    //reset timers/counters
+                    //reset timers/bools
 
                     actingBattleObject.currentAbility.chargeStartTimer = 0;
                     actingBattleObject.currentAbility.abilityStartTimer = 0;
                     actingBattleObject.currentAbility.infChargeTimer = 0;
 
+                    actingBattleObject.commandIssued = false;
 
+                    actingBattleObject.currentAbility.isLocked = false;
+                    actingBattleObject.currentAbility.targetChosen = false;
+                    
+                    actingBattleObject.queuedAbility.isLocked = false;
+                    actingBattleObject.queuedAbility.targetChosen = false;
+                   
                     //set cooldown
 
                     actingBattleObject.currentAbility.cooldownEndTimer = battleTimer + actingBattleObject.currentAbility.cooldown;
 
                     //reset everything else
 
-                    actingBattleObject.currentAbility.targetChosen = false;
                     actingBattleObject.currentAbility = actingBattleObject.abilities[0];
+                    actingBattleObject.queuedAbility = actingBattleObject.abilities[0];
                     actingBattleObject.currentBattleState = BattleObject.BattleStates.Wait;
                         
         
@@ -628,6 +623,7 @@ public class BattleManager : MonoBehaviour {
 
                         actingBattleObject.currentAbility.chargeStartTimer = 0;
                         actingBattleObject.currentAbility.abilityStartTimer = 0;
+                        actingBattleObject.currentAbility.infChargeTimer = 0;
 
                         actingBattleObject.currentAbility.lastProcTimer = 0.0f;
                         actingBattleObject.currentAbility.procCounter = 0;
@@ -638,7 +634,9 @@ public class BattleManager : MonoBehaviour {
 
                         //reset everything else
 
+                        actingBattleObject.currentAbility.isLocked = false;
                         actingBattleObject.currentAbility.targetChosen = false;
+
                         actingBattleObject.currentAbility = actingBattleObject.abilities[0];
                         actingBattleObject.currentBattleState = BattleObject.BattleStates.Wait;
 
@@ -943,8 +941,9 @@ public class BattleManager : MonoBehaviour {
                                 }
 
                                 else if (actingBattleObject.currentAbility.abilityType == Ability.AbilityTypes.InfCharge) {
-                                actingBattleObject.currentBattleState = BattleObject.BattleStates.InfCharge;
-                                }    
+                                    actingBattleObject.currentBattleState = BattleObject.BattleStates.InfCharge;
+                                    actingBattleObject.currentAbility.isLocked = true;
+                                }  
 
                             } //end else (has no charge)
 
@@ -962,269 +961,147 @@ public class BattleManager : MonoBehaviour {
 
                     actingBattleObject.currentAbility.infChargeTimer += Time.deltaTime;
 
-                    //Begin command section 
-                    //(essentially BattleStates.Wait, except hitting the key for InfCharge dumps to targeting that ability)
+                    if (actingBattleObject == selectedHero) {
 
-                    if (abilityOneKeyed && actingBattleObject == selectedHero) {
+                        if (abilityOneKeyed) {
+                            if ((actingBattleObject.abilities[1].isLocked != true)
+                                && (battleTimer > actingBattleObject.abilities[1].cooldownEndTimer)) {
 
-                        if (battleTimer > selectedHero.abilities[1].cooldownEndTimer) {
+                                actingBattleObject.currentAbility.isLocked = false;
 
-                            actingBattleObject.queuedAbility = actingBattleObject.abilities[1];
-                            actingBattleObject.commandIssued = true;
+                                actingBattleObject.queuedAbility = selectedHero.abilities[1];
+                                actingBattleObject.commandIssued = true;
+                                
+                                if (actingBattleObject.queuedAbility.abilityType == Ability.AbilityTypes.InfCharge) {
+                                    actingBattleObject.queuedAbility.isLocked = true;
+                                }
+                            }
+                        } //end abilityOneKeyed
+
+                        if (abilityTwoKeyed) {
+                            if ((actingBattleObject.abilities[2].isLocked != true)
+                                && (battleTimer > actingBattleObject.abilities[2].cooldownEndTimer)) {
+
+                                actingBattleObject.currentAbility.isLocked = false;
+
+                                actingBattleObject.queuedAbility = selectedHero.abilities[2];
+                                actingBattleObject.commandIssued = true;
+
+                                if (actingBattleObject.queuedAbility.abilityType == Ability.AbilityTypes.InfCharge) {
+                                    actingBattleObject.queuedAbility.isLocked = true;
+                                }
+                            }
+                        } //end abilityTwoKeyed
+
+                        if (abilityThreeKeyed) {
+                            if ((actingBattleObject.abilities[3].isLocked != true)
+                                && (battleTimer > actingBattleObject.abilities[3].cooldownEndTimer)) {
+
+                                actingBattleObject.currentAbility.isLocked = false;
+
+                                actingBattleObject.queuedAbility = selectedHero.abilities[3];
+                                actingBattleObject.commandIssued = true;
+
+                                if (actingBattleObject.queuedAbility.abilityType == Ability.AbilityTypes.InfCharge) {
+                                    actingBattleObject.queuedAbility.isLocked = true;
+                                }
+                            }
+                        } //end abilityThreeKeyed
+
+                        if (actingBattleObject.commandIssued == true) {
 
                             if (actingBattleObject.queuedAbility.abilityType == Ability.AbilityTypes.InfCharge) {
 
-                                if ((actingBattleObject.currentAbility.retainsInfCharge != true) && (actingBattleObject.currentAbility != actingBattleObject.abilities[1])) {
-                                    actingBattleObject.currentAbility.infChargeTimer = 0;
-                                }
-
-                                actingBattleObject.currentAbility = (Ability)actingBattleObject.queuedAbility;
-                            }
-
-                            if (actingBattleObject.queuedAbility.targetScope == (Ability.TargetScopes.SingleEnemy | Ability.TargetScopes.SingleHero)) {
-                                Debug.Log("Select a Target! ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
-                            }
-                        }
-
-                        else {
-                            Debug.Log(actingBattleObject.name + "'s '" + actingBattleObject.abilities[1] + "' is on cooldown for " + (actingBattleObject.abilities[1].cooldownEndTimer - battleTimer) + " seconds!");
-                        }
-
-                    } //end ability one keyed
-
-                    else if (abilityTwoKeyed && actingBattleObject == selectedHero) {
-
-                        if (battleTimer > actingBattleObject.abilities[2].cooldownEndTimer) {
-
-                            actingBattleObject.queuedAbility = actingBattleObject.abilities[2];
-                            actingBattleObject.commandIssued = true;
-
-                            if (actingBattleObject.queuedAbility.abilityType == Ability.AbilityTypes.InfCharge) {
-
-                                if ((actingBattleObject.currentAbility.retainsInfCharge != true) && (actingBattleObject.currentAbility != actingBattleObject.abilities[2])) {
-                                    actingBattleObject.currentAbility.infChargeTimer = 0;
-                                }
-
-                                actingBattleObject.currentAbility = (Ability)actingBattleObject.queuedAbility;
-                            }
-
-                            if (actingBattleObject.queuedAbility.targetScope == (Ability.TargetScopes.SingleEnemy | Ability.TargetScopes.SingleHero)) {
-                                Debug.Log("Select a Target! ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
-                            }
-                        }
-
-                        else {
-                            Debug.Log(actingBattleObject.name + "'s '" + actingBattleObject.abilities[2] + "' is on cooldown for " + (actingBattleObject.abilities[2].cooldownEndTimer - battleTimer) + " seconds!");
-                        }
-
-                    } //end ability two keyed
-
-                    else if (abilityThreeKeyed && actingBattleObject == selectedHero) {
-
-                        if (battleTimer > actingBattleObject.abilities[3].cooldownEndTimer) {
-
-                            actingBattleObject.queuedAbility = actingBattleObject.abilities[3];
-                            actingBattleObject.commandIssued = true;
-
-                            if (actingBattleObject.queuedAbility.abilityType == Ability.AbilityTypes.InfCharge) {
-
-                                if ((actingBattleObject.currentAbility.retainsInfCharge != true) && (actingBattleObject.currentAbility != actingBattleObject.abilities[3])) {
-                                    actingBattleObject.currentAbility.infChargeTimer = 0;
-                                }
-
-                                actingBattleObject.currentAbility = (Ability)actingBattleObject.queuedAbility;
-                            }
-
-                            if (actingBattleObject.queuedAbility.targetScope == (Ability.TargetScopes.SingleEnemy | Ability.TargetScopes.SingleHero)) {
-                                Debug.Log("Select a Target! ('o' and 'p' for enemies, 'n' and 'm' for heroes! Otherwise, hit 'x' to cancel.)");
-                            }
-                        }
-
-                        else {
-                            Debug.Log(actingBattleObject.name + "'s '" + actingBattleObject.abilities[3] + "' is on cooldown for " + (actingBattleObject.abilities[3].cooldownEndTimer - battleTimer) + " seconds!");
-                        }
-
-                    } //end ability three keyed
-
-
-                    //End command section of InfCharge
-
-
-                  // if (actingBattleObject.commandIssued == true) {
-
-                        if (abilityCanceled) {
-                            Debug.Log(actingBattleObject.queuedAbility.name + " canceled!");
-                            actingBattleObject.queuedAbility = actingBattleObject.abilities[0];
-
-                            if (actingBattleObject.currentAbility.abilityType == Ability.AbilityTypes.InfCharge) {
+                                actingBattleObject.currentAbility.isLocked = false;
 
                                 if (actingBattleObject.currentAbility.retainsInfCharge != true) {
                                     actingBattleObject.currentAbility.infChargeTimer = 0;
                                 }
-                                actingBattleObject.currentBattleState = BattleObject.BattleStates.Wait;
-                                actingBattleObject.currentAbility = actingBattleObject.abilities[0];
-                            }
-                        }
-
-                        if (actingBattleObject.queuedAbility.targetScope == Ability.TargetScopes.SingleEnemy) {
-
-                            if (actingBattleObject == selectedHero && enemyObjectOneTargeted) {
-
-                                actingBattleObject.currentAbility.cooldownEndTimer = battleTimer + actingBattleObject.currentAbility.cooldown;
-                                actingBattleObject.currentAbility.targetChosen = false;
-
-                                if ((actingBattleObject.currentAbility.abilityType == Ability.AbilityTypes.InfCharge)
-                                    && (actingBattleObject.currentAbility.retainsInfCharge != true)) {
-
-                                    actingBattleObject.currentAbility.infChargeTimer = 0.0f;
-                                }
 
                                 actingBattleObject.currentAbility = (Ability)actingBattleObject.queuedAbility;
+                                actingBattleObject.currentAbility.isLocked = true;
+                                actingBattleObject.commandIssued = false;
+
+                            } //end if another InfCharge
+                                
+                        } //end if command issued
 
 
-                                if (actingBattleObject.currentAbility.abilityType != Ability.AbilityTypes.InfCharge) {
-                                    actingBattleObject.queuedAbility = actingBattleObject.abilities[0];
-                                }
+                        if (abilityCanceled) {
 
-                                actingBattleObject.currentAbility.currentTarget = enemyObjectOne;
-                                actingBattleObject.currentAbility.targetChosen = true;
-                                actingBattleObject.currentAbility.chargeStartTimer = battleTimer;
+                            actingBattleObject.currentAbility.isLocked = false;
 
-                                Debug.Log(actingBattleObject.name + " begins charging " + actingBattleObject.currentAbility.name + " on " + actingBattleObject.currentAbility.currentTarget.name + "!");
+                            if (actingBattleObject.currentAbility.retainsInfCharge != true) {
+                                actingBattleObject.currentAbility.infChargeTimer = 0;
                             }
 
-                            else if (actingBattleObject == selectedHero && enemyObjectTwoTargeted) {
+                            Debug.Log(actingBattleObject.queuedAbility.name + " canceled!");
+                            actingBattleObject.queuedAbility = actingBattleObject.abilities[0];
+                            actingBattleObject.currentAbility = actingBattleObject.abilities[0];
+                            actingBattleObject.currentBattleState = BattleObject.BattleStates.Wait;
 
-                                actingBattleObject.currentAbility.cooldownEndTimer = battleTimer + actingBattleObject.currentAbility.cooldown;
-                                actingBattleObject.currentAbility.targetChosen = false;
+                        } //end if ability canceleds
 
-                                if ((actingBattleObject.currentAbility.abilityType == Ability.AbilityTypes.InfCharge)
-                                    && (actingBattleObject.currentAbility.retainsInfCharge != true)) {
+                        if (actingBattleObject.queuedAbility.targetChosen != true) {
 
-                                    actingBattleObject.currentAbility.infChargeTimer = 0.0f;
+                            if (actingBattleObject.queuedAbility.targetScope == Ability.TargetScopes.SingleEnemy) {
+
+                                if (enemyObjectOneTargeted) {
+                                    actingBattleObject.queuedAbility.currentTarget = enemyObjectOne;
+                                    actingBattleObject.queuedAbility.targetChosen = true;
                                 }
 
-                                actingBattleObject.currentAbility = (Ability)actingBattleObject.queuedAbility;
-
-                                if (actingBattleObject.currentAbility.abilityType != Ability.AbilityTypes.InfCharge) {
-                                    actingBattleObject.queuedAbility = actingBattleObject.abilities[0];
+                                if (enemyObjectTwoTargeted) {
+                                    actingBattleObject.queuedAbility.currentTarget = enemyObjectTwo;
+                                    actingBattleObject.queuedAbility.targetChosen = true;
                                 }
 
-                                actingBattleObject.currentAbility.currentTarget = enemyObjectTwo;
-                                actingBattleObject.currentAbility.targetChosen = true;
-                                actingBattleObject.currentAbility.chargeStartTimer = battleTimer;
+                            } //end if single enemy
 
-                                Debug.Log(actingBattleObject.name + " begins charging " + actingBattleObject.currentAbility.name + " on " + actingBattleObject.currentAbility.currentTarget.name + "!");
-                            }
 
-                        } //end if single enemy
+                            else if (actingBattleObject.queuedAbility.targetScope == Ability.TargetScopes.SingleHero) {
 
-                        if (actingBattleObject.queuedAbility.targetScope == Ability.TargetScopes.SingleHero) {
-
-                            if (actingBattleObject == selectedHero && heroObjectOneTargeted) {
-
-                                actingBattleObject.currentAbility.cooldownEndTimer = battleTimer + actingBattleObject.currentAbility.cooldown;
-                                actingBattleObject.currentAbility.targetChosen = false;
-
-                                if ((actingBattleObject.currentAbility.abilityType == Ability.AbilityTypes.InfCharge)
-                                    && (actingBattleObject.currentAbility.retainsInfCharge != true)) {
-
-                                    actingBattleObject.currentAbility.infChargeTimer = 0.0f;
+                                if (heroObjectOneTargeted) {
+                                    actingBattleObject.queuedAbility.currentTarget = heroObjectOne;
+                                    actingBattleObject.queuedAbility.targetChosen = true;
                                 }
 
-                                actingBattleObject.currentAbility = (Ability)actingBattleObject.queuedAbility;
-
-                                if (actingBattleObject.currentAbility.abilityType != Ability.AbilityTypes.InfCharge) {
-                                    actingBattleObject.queuedAbility = actingBattleObject.abilities[0];
+                                if (heroObjectTwoTargeted) {
+                                    actingBattleObject.queuedAbility.currentTarget = heroObjectTwo;
+                                    actingBattleObject.queuedAbility.targetChosen = true;
                                 }
 
-                                actingBattleObject.currentAbility.currentTarget = heroObjectOne;
-                                actingBattleObject.currentAbility.targetChosen = true;
-                                actingBattleObject.currentAbility.chargeStartTimer = battleTimer;
+                            } //end if single hero
 
-                                Debug.Log(actingBattleObject.name + " begins charging " + actingBattleObject.currentAbility.name + " on " + actingBattleObject.currentAbility.currentTarget.name + "!");
-                            }
+                            else if (actingBattleObject.queuedAbility.targetScope == Ability.TargetScopes.AllEnemies) {
 
-                            else if (actingBattleObject == selectedHero && heroObjectTwoTargeted) {
+                                actingBattleObject.queuedAbility.currentTarget = allEnemies;
+                                actingBattleObject.queuedAbility.targetChosen = true;
 
-                                actingBattleObject.currentAbility.cooldownEndTimer = battleTimer + actingBattleObject.currentAbility.cooldown;
-                                actingBattleObject.currentAbility.targetChosen = false;
+                            } //end if all enemies
 
-                                if ((actingBattleObject.currentAbility.abilityType == Ability.AbilityTypes.InfCharge)
-                                    && (actingBattleObject.currentAbility.retainsInfCharge != true)) {
+                            else if (actingBattleObject.queuedAbility.targetScope == Ability.TargetScopes.AllHeroes) {
 
-                                    actingBattleObject.currentAbility.infChargeTimer = 0.0f;
-                                }
+                                actingBattleObject.queuedAbility.currentTarget = allHeroes;
+                                actingBattleObject.queuedAbility.targetChosen = true;
 
-                                actingBattleObject.currentAbility = (Ability)actingBattleObject.queuedAbility;
+                            } //end if all heroes
 
-                                if (actingBattleObject.currentAbility.abilityType == Ability.AbilityTypes.InfCharge) {
-                                    actingBattleObject.queuedAbility = actingBattleObject.abilities[0];
-                                }
-
-                                actingBattleObject.currentAbility.currentTarget = heroObjectTwo;
-                                actingBattleObject.currentAbility.targetChosen = true;
-                                actingBattleObject.currentAbility.chargeStartTimer = battleTimer;
-
-                                Debug.Log(actingBattleObject.name + " begins charging " + actingBattleObject.currentAbility.name + " on " + actingBattleObject.currentAbility.currentTarget.name + "!");
-                            }
-
-                        } //end if single hero
+                        } //end if target not chosen
 
 
-                        if (actingBattleObject.queuedAbility.targetScope == Ability.TargetScopes.AllHeroes) {
+                        else if (actingBattleObject.queuedAbility.targetChosen == true) {
 
-                            actingBattleObject.currentAbility.cooldownEndTimer = battleTimer + actingBattleObject.currentAbility.cooldown;
-                            actingBattleObject.currentAbility.targetChosen = false;
+                            actingBattleObject.currentAbility.isLocked = false;
+                            
 
-                            if ((actingBattleObject.currentAbility.abilityType == Ability.AbilityTypes.InfCharge)
-                                    && (actingBattleObject.currentAbility.retainsInfCharge != true)) {
-
-                                actingBattleObject.currentAbility.infChargeTimer = 0.0f;
+                            if ((actingBattleObject.currentAbility != actingBattleObject.queuedAbility) && (actingBattleObject.currentAbility.retainsInfCharge != true)) {
+                                actingBattleObject.currentAbility.infChargeTimer = 0;
                             }
 
                             actingBattleObject.currentAbility = (Ability)actingBattleObject.queuedAbility;
-
-                            if (actingBattleObject.currentAbility.abilityType != Ability.AbilityTypes.InfCharge) {
-                                actingBattleObject.queuedAbility = actingBattleObject.abilities[0];
-                            }
-
-                            actingBattleObject.currentAbility.currentTarget = allHeroes;
-                            actingBattleObject.currentAbility.targetChosen = true;
+                            actingBattleObject.queuedAbility = actingBattleObject.abilities[0];
                             actingBattleObject.currentAbility.chargeStartTimer = battleTimer;
-
-                            Debug.Log(actingBattleObject.name + " begins charging " + actingBattleObject.currentAbility.name + " on the party!");
-
-                        } //end if all heroes
-
-
-                        if (actingBattleObject.queuedAbility.targetScope == Ability.TargetScopes.AllEnemies) {
-
-                            actingBattleObject.currentAbility.cooldownEndTimer = battleTimer + actingBattleObject.currentAbility.cooldown;
-                            actingBattleObject.currentAbility.targetChosen = false;
-
-                            if ((actingBattleObject.currentAbility.abilityType == Ability.AbilityTypes.InfCharge)
-                                    && (actingBattleObject.currentAbility.retainsInfCharge != true)) {
-
-                                actingBattleObject.currentAbility.infChargeTimer = 0.0f;
-                            }
-
-                            actingBattleObject.currentAbility = (Ability)actingBattleObject.queuedAbility;
-
-                            if (actingBattleObject.currentAbility.abilityType != Ability.AbilityTypes.InfCharge) {
-                                actingBattleObject.queuedAbility = actingBattleObject.abilities[0];
-                            }
-
-                            actingBattleObject.currentAbility.currentTarget = allEnemies;
-                            actingBattleObject.currentAbility.targetChosen = true;
-                            actingBattleObject.currentAbility.chargeStartTimer = battleTimer;
-
-                            Debug.Log(actingBattleObject.name + " begins charging " + actingBattleObject.currentAbility.name + " on all enemies!");
-
-                        } //end if all Enemies
-
-
-                        if (actingBattleObject.currentAbility.targetChosen == true) {
 
                             if (actingBattleObject.currentAbility.abilityType == Ability.AbilityTypes.InfCharge) {
                                 actingBattleObject.currentBattleState = BattleObject.BattleStates.Burst;
@@ -1249,17 +1126,11 @@ public class BattleManager : MonoBehaviour {
                                     actingBattleObject.currentBattleState = BattleObject.BattleStates.InfBarrage;
                                 }
 
-                                else if (actingBattleObject.currentAbility.abilityType == Ability.AbilityTypes.InfCharge) {
-                                actingBattleObject.currentBattleState = BattleObject.BattleStates.InfCharge;
-                                }    
-                                
                             } //end else (has no charge)
-
-                            actingBattleObject.currentAbility.targetChosen = false;
 
                         } //end if targetChosen = true
 
-                   // } //end if command issued 
+                    } //end if selectedHero = actingBattleObject
 
 
                     break; //end InfCharge case
