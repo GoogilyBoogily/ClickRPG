@@ -59,7 +59,7 @@ public class TestHero : Hero {
         abilities.Add(new NullAbility());
         abilities.Add(new EndlessPunches());
         abilities.Add(new LargestPunch());
-        abilities.Add(new PunchBarrage());
+        abilities.Add(new FireBall());
         
 
 	} // end constructor

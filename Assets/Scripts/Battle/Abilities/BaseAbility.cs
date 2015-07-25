@@ -60,6 +60,10 @@ namespace Abilities {
             get; set;
         }
 
+        public bool isLocked {
+            get; set;
+        }
+
 
         //Proc Effects
         public bool damagesTarget {
@@ -168,6 +172,7 @@ namespace Abilities {
 
             hasCharge = true;
             retainsInfCharge = false;
+            isLocked = false;
 
             damagesTarget = false;
             healsTarget = false;
